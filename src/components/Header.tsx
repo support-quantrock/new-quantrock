@@ -21,6 +21,7 @@ export function Header() {
           <a href="/#features" className="text-gray-300 hover:text-white transition-colors font-medium">{t.nav.features.toUpperCase()}</a>
           <a href="/#how-it-works" className="text-gray-300 hover:text-white transition-colors font-medium">{t.nav.howItWorks.toUpperCase()}</a>
           <a href="/#gallery" className="text-gray-300 hover:text-white transition-colors font-medium">{t.nav.gallery.toUpperCase()}</a>
+          <a href="/app" className="text-gray-300 hover:text-white transition-colors font-medium">APP</a>
           <a href="/#about" className="text-gray-300 hover:text-white transition-colors font-medium">{t.nav.about.toUpperCase()}</a>
           {/* <a href="/challenge" className="text-gray-300 hover:text-white transition-colors font-medium">{t.nav.challenge.toUpperCase()}</a> */}
         </div>
@@ -55,9 +56,7 @@ export function Header() {
             )}
           </div>
           <a
-            href="https://quantrock.app.link/X6mJ3n3GGVb"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/app"
             className="bg-gradient-to-r from-[#A855F7] to-[#3B82F6] hover:from-[#C084FC] hover:to-[#60A5FA] text-white px-6 py-2.5 rounded-full font-semibold transition-all duration-300 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
           >
             {t.nav.downloadApp}
@@ -135,6 +134,12 @@ export function Header() {
                 >
                   {t.nav.about}
                 </a>
+                <a
+                  href="/app"
+                  className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 transition-all duration-300 border-b border-purple-500/10 last:border-b-0"
+                >
+                  App
+                </a>
                 {/* <a
                   href="/challenge"
                   className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 transition-all duration-300 border-b border-purple-500/10 last:border-b-0"
@@ -154,9 +159,7 @@ export function Header() {
                   {t.nav.affiliate}
                 </a>
                 <a
-                  href="https://quantrock.app.link/X6mJ3n3GGVb"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/app"
                   className="block px-4 py-3 text-purple-400 font-semibold hover:text-purple-300 hover:bg-purple-600/20 transition-all duration-300"
                 >
                   {t.nav.downloadApp}

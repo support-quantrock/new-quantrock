@@ -6,6 +6,8 @@ import { TermsOfUsePage } from './components/TermsOfUsePage';
 import { PrivacyPolicyPage } from './components/PrivacyPolicyPage';
 import { ChallengePage } from './components/ChallengePage';
 import { FAQPage } from './components/FAQPage';
+import { AppPage } from './components/AppPage';
+import { DownloadRedirect } from './components/DownloadRedirect';
 import { LanguageProvider } from './contexts/LanguageContext';
 
 function App() {
@@ -14,6 +16,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<QuantrockLanding />} />
+          <Route path="/app" element={<AppPage />} />
+          <Route path="/download" element={<DownloadRedirect />} />
           <Route path="/ambassador" element={<AmbassadorPage />} />
           <Route path="/affiliate" element={<AffiliatePage />} />
           <Route path="/terms" element={<TermsOfUsePage />} />

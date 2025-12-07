@@ -83,9 +83,7 @@ export function AmbassadorPage() {
               </p>
               <div className="flex flex-wrap gap-4">
                 <a
-                  href="https://quantrock.app.link/X6mJ3n3GGVb"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/app"
                   className="px-8 py-4 bg-gradient-to-r from-[#A855F7] to-[#3B82F6] rounded-full font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 flex items-center gap-2"
                 >
                   {t.joinNow}
@@ -292,9 +290,7 @@ export function AmbassadorPage() {
               {t.cta.description}
             </p>
             <a
-              href="https://quantrock.app.link/X6mJ3n3GGVb"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/app"
               className="inline-flex items-center gap-2 px-10 py-5 bg-gradient-to-r from-[#A855F7] to-[#3B82F6] rounded-full font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300"
             >
               {t.cta.button}

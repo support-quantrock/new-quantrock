@@ -103,16 +103,16 @@ export function ChallengePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-2xl md:text-3xl font-bold text-white mb-6 leading-tight"
+                className="text-2xl md:text-4xl font-bold text-white mb-3 leading-tight"
               >
-                {t.title1}
-                <span className="block mt-2">
-                  {t.title2.split(' ').slice(0, -2).join(' ')}{' '}
-                  <span className="bg-gradient-to-r from-amber-400 to-yellow-400 bg-clip-text text-transparent">{t.title2.split(' ').slice(-2).join(' ')}</span>
+                The biggest investment simulation challenge…
+                <span className="block mt-1">
+                  Combining learning, competition, and{' '}
+                  <span className="bg-gradient-to-r from-amber-400 to-yellow-400 bg-clip-text text-transparent">real prizes</span>.
                 </span>
-                <span className="block mt-2">
-                  <span className="bg-gradient-to-r from-amber-400 to-yellow-400 bg-clip-text text-transparent">{t.amount}</span>{' '}
-                  {t.and} <span className="text-white">50%</span> {t.ofProfits}
+                <span className="block mt-1">
+                  A professional challenge to manage a{' '}
+                  <span className="bg-gradient-to-r from-amber-400 to-yellow-400 bg-clip-text text-transparent">$100,000</span> simulated portfolio
                 </span>
               </motion.h1>
 
@@ -120,16 +120,16 @@ export function ChallengePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-base text-gray-300 mb-8 leading-relaxed"
+                className="text-lg text-gray-300 mb-3 leading-relaxed"
               >
-                {t.description}
+                A comprehensive program designed to refine investors' skills and enable them to experience an investment journey within a professional trading environment that simulates the actual markets 100% using a hedge-fund style approach, all with zero financial risk.
               </motion.p>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
-                className="flex flex-col sm:flex-row gap-4 mb-12"
+                className="flex flex-col sm:flex-row gap-3 mb-4"
               >
                 <a
                   href="#stages"
@@ -138,9 +138,7 @@ export function ChallengePage() {
                   {t.howItWorks}
                 </a>
                 <a
-                  href="https://quantrock.app.link/X6mJ3n3GGVb"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/app"
                   className="bg-gradient-to-r from-cyan-400 to-blue-500 text-white px-8 py-3 rounded-lg hover:from-cyan-500 hover:to-blue-600 transition-all duration-200 font-semibold shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 text-center"
                 >
                   {t.startChallenge}
@@ -151,34 +149,34 @@ export function ChallengePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+                className="grid grid-cols-1 sm:grid-cols-3 gap-1"
               >
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.7 }}
-                  className="bg-gradient-to-br from-[#1a1f4d]/80 to-[#2d1b4e]/60 backdrop-blur-sm rounded-xl p-4 border border-cyan-500/20 text-center"
+                  className="bg-gradient-to-br from-[#1a1f4d]/80 to-[#2d1b4e]/60 backdrop-blur-sm rounded-xl p-2 border border-cyan-500/20 text-center"
                 >
-                  <div className="text-xl md:text-2xl font-bold text-white mb-1">$10,000</div>
-                  <div className="text-sm text-gray-400">{t.realFunding}</div>
+                  <div className="text-2xl md:text-3xl font-bold text-white mb-1">$100,000</div>
+                  <div className="text-sm text-gray-400">simulated portfolio</div>
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.8 }}
-                  className="bg-gradient-to-br from-[#1a1f4d]/80 to-[#2d1b4e]/60 backdrop-blur-sm rounded-xl p-4 border border-cyan-500/20 text-center"
+                  className="bg-gradient-to-br from-[#1a1f4d]/80 to-[#2d1b4e]/60 backdrop-blur-sm rounded-xl p-2 border border-cyan-500/20 text-center"
                 >
-                  <div className="text-xl md:text-2xl font-bold text-white mb-1">50%</div>
-                  <div className="text-sm text-gray-400">{t.profitShare}</div>
+                  <div className="text-2xl md:text-3xl font-bold text-white mb-1">Monthly</div>
+                  <div className="text-sm text-gray-400">Winner</div>
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.9 }}
-                  className="bg-gradient-to-br from-[#1a1f4d]/80 to-[#2d1b4e]/60 backdrop-blur-sm rounded-xl p-4 border border-cyan-500/20 text-center"
+                  className="bg-gradient-to-br from-[#1a1f4d]/80 to-[#2d1b4e]/60 backdrop-blur-sm rounded-xl p-2 border border-cyan-500/20 text-center"
                 >
-                  <div className="text-xl md:text-2xl font-bold text-white mb-1">{t.highWatermark}</div>
-                  <div className="text-sm text-gray-400">{t.profitProtection}</div>
+                  <div className="text-2xl md:text-3xl font-bold text-white mb-1">Free</div>
+                  <div className="text-sm text-gray-400">without risking</div>
                 </motion.div>
               </motion.div>
             </motion.div>

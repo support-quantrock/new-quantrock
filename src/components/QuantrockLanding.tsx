@@ -64,6 +64,8 @@ import {
   BarChart3,
   ChevronRight,
   ChevronLeft,
+  Star,
+  Target,
 } from 'lucide-react';
 import { Marquee } from './Marquee';
 import { Gallery } from './Gallery';
@@ -1320,9 +1322,7 @@ export function QuantrockLanding() {
                 className="flex flex-col sm:flex-row gap-4 items-start"
               >
                 <motion.a
-                  href="https://quantrock.app.link/X6mJ3n3GGVb"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/app"
                   className="group relative bg-gradient-to-r from-[#A855F7] to-[#3B82F6] hover:from-[#C084FC] hover:to-[#60A5FA] text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 flex items-center gap-2 shadow-lg shadow-purple-500/50 hover:shadow-xl hover:shadow-purple-500/70"
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
@@ -1551,10 +1551,10 @@ export function QuantrockLanding() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 backdrop-blur-sm border border-purple-400/30 rounded-full px-4 py-2 mb-6"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 backdrop-blur-sm border border-amber-400/30 rounded-full px-4 py-2 mb-3"
               >
-                <Trophy className="w-5 h-5 text-purple-400" />
-                <span className="text-purple-300 font-semibold">Quantrock Global Investment Championship</span>
+                <Trophy className="w-5 h-5 text-amber-400" />
+                <span className="text-amber-300 font-semibold">Quantrock Global Investment Championship</span>
               </motion.div>
 
               <motion.h1
@@ -1562,16 +1562,16 @@ export function QuantrockLanding() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight"
+                className="text-2xl md:text-4xl font-bold text-white mb-3 leading-tight"
               >
-                {t.landing.challenge.title1}
-                <span className="block mt-2">
-                  {t.landing.challenge.title2}{' '}
-                  <span className="bg-gradient-to-r from-[#A855F7] to-[#3B82F6] bg-clip-text text-transparent">{t.landing.challenge.title3}</span>
+                The biggest investment simulation challenge…
+                <span className="block mt-1">
+                  Combining learning, competition, and{' '}
+                  <span className="bg-gradient-to-r from-amber-400 to-yellow-400 bg-clip-text text-transparent">real prizes</span>.
                 </span>
-                <span className="block mt-2">
-                  <span className="bg-gradient-to-r from-[#A855F7] to-[#3B82F6] bg-clip-text text-transparent">$10,000</span>{' '}
-                  {t.landing.challenge.title4} <span className="text-white">50%</span> {t.landing.challenge.title5}
+                <span className="block mt-1">
+                  A professional challenge to manage a{' '}
+                  <span className="bg-gradient-to-r from-amber-400 to-yellow-400 bg-clip-text text-transparent">$100,000</span> simulated portfolio
                 </span>
               </motion.h1>
 
@@ -1580,9 +1580,9 @@ export function QuantrockLanding() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-lg text-gray-300 mb-8 leading-relaxed"
+                className="text-lg text-gray-300 mb-3 leading-relaxed"
               >
-                {t.landing.challenge.description}
+                A comprehensive program designed to refine investors' skills and enable them to experience an investment journey within a professional trading environment that simulates the actual markets 100% using a hedge-fund style approach, all with zero financial risk.
               </motion.p>
 
               <motion.div
@@ -1590,19 +1590,17 @@ export function QuantrockLanding() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.5 }}
-                className="flex flex-col sm:flex-row gap-4 mb-12"
+                className="flex flex-col sm:flex-row gap-3 mb-4"
               >
                 <a
                   href="#stages"
-                  className="bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-lg hover:bg-white/20 transition-all duration-200 font-medium border border-purple-400/30 text-center"
+                  className="bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-lg hover:bg-white/20 transition-all duration-200 font-medium border border-cyan-400/30 text-center"
                 >
                   {t.landing.challenge.howItWorks}
                 </a>
                 <a
-                  href="https://quantrock.app.link/X6mJ3n3GGVb"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-gradient-to-r from-[#A855F7] to-[#3B82F6] text-white px-8 py-3 rounded-lg hover:from-[#C084FC] hover:to-[#60A5FA] transition-all duration-200 font-semibold shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 text-center"
+                  href="/app"
+                  className="bg-gradient-to-r from-cyan-400 to-blue-500 text-white px-8 py-3 rounded-lg hover:from-cyan-500 hover:to-blue-600 transition-all duration-200 font-semibold shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 text-center"
                 >
                   {t.landing.challenge.startChallenge}
                 </a>
@@ -1613,37 +1611,37 @@ export function QuantrockLanding() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+                className="grid grid-cols-1 sm:grid-cols-3 gap-1"
               >
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.7 }}
-                  className="bg-gradient-to-br from-purple-900/40 to-blue-900/40 backdrop-blur-sm rounded-xl p-4 border border-purple-500/20 text-center"
+                  className="bg-gradient-to-br from-[#1a1f4d]/80 to-[#2d1b4e]/60 backdrop-blur-sm rounded-xl p-2 border border-cyan-500/20 text-center"
                 >
-                  <div className="text-2xl md:text-3xl font-bold text-white mb-1">$10,000</div>
-                  <div className="text-sm text-gray-400">{t.landing.challenge.realFunding}</div>
+                  <div className="text-2xl md:text-3xl font-bold text-white mb-1">$100,000</div>
+                  <div className="text-sm text-gray-400">simulated portfolio</div>
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.8 }}
-                  className="bg-gradient-to-br from-purple-900/40 to-blue-900/40 backdrop-blur-sm rounded-xl p-4 border border-purple-500/20 text-center"
+                  className="bg-gradient-to-br from-[#1a1f4d]/80 to-[#2d1b4e]/60 backdrop-blur-sm rounded-xl p-2 border border-cyan-500/20 text-center"
                 >
-                  <div className="text-2xl md:text-3xl font-bold text-white mb-1">50%</div>
-                  <div className="text-sm text-gray-400">{t.landing.challenge.profitShare}</div>
+                  <div className="text-2xl md:text-3xl font-bold text-white mb-1">Monthly</div>
+                  <div className="text-sm text-gray-400">Winner</div>
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.9 }}
-                  className="bg-gradient-to-br from-purple-900/40 to-blue-900/40 backdrop-blur-sm rounded-xl p-4 border border-purple-500/20 text-center"
+                  className="bg-gradient-to-br from-[#1a1f4d]/80 to-[#2d1b4e]/60 backdrop-blur-sm rounded-xl p-2 border border-cyan-500/20 text-center"
                 >
-                  <div className="text-2xl md:text-3xl font-bold text-white mb-1">{t.landing.challenge.highWatermark}</div>
-                  <div className="text-sm text-gray-400">{t.landing.challenge.profitProtection}</div>
+                  <div className="text-2xl md:text-3xl font-bold text-white mb-1">Free</div>
+                  <div className="text-sm text-gray-400">without risking</div>
                 </motion.div>
               </motion.div>
             </motion.div>
@@ -1669,6 +1667,163 @@ export function QuantrockLanding() {
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
           <div className="w-6 h-10 border-2 border-purple-400/50 rounded-full flex items-start justify-center p-2">
             <div className="w-1.5 h-1.5 bg-purple-400 rounded-full"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Master the Markets - 28-Day Skill Challenge */}
+      <section className="w-full bg-gradient-to-b from-[#0a0e27] to-[#1a1f4d] flex justify-center py-10">
+        <div className="w-[85%] mx-auto px-0">
+          <div className="grid lg:grid-cols-[65%_35%] gap-8 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.6 }}
+              className="flex flex-col text-center md:text-start items-start justify-center gap-4 md:gap-5 m-0 p-0"
+            >
+              <div className="flex w-fit h-fit justify-center items-center gap-2 rounded-full border border-amber-400 px-3 py-2 bg-amber-500/10">
+                <svg className="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+                </svg>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-400 text-xs italic font-bold">EXCLUSIVE</span>
+              </div>
+
+              <div className="w-full font-bold text-4xl md:text-5xl leading-tight">
+                <span className="text-white whitespace-nowrap">Master the Markets</span>
+                <span className="text-white"> - </span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-400">28-Day Skill Challenge</span>
+              </div>
+
+              <div className="flex flex-col gap-4 md:gap-5 w-full">
+                <div className="text-white text-xl leading-relaxed font-bold w-full">
+                  Designed to help you pass the challenge and trade like a professional investor.
+                </div>
+                <div className="text-white text-lg leading-relaxed w-full">
+                  Get access to 500+ interactive lessons and exercises covering technical analysis, risk management, portfolio optimization, and professional trading psychology. Learn to recognize market trends, identify high-probability setups, and develop the disciplined mindset required for consistent success.
+                </div>
+                <div className="text-white text-lg leading-relaxed opacity-70 w-full">
+                  Available only for challenge participants.
+                </div>
+              </div>
+
+              <a
+                href="/app"
+                className="inline-flex gap-2 whitespace-nowrap text-sm md:mt-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white justify-center items-center text-center font-bold rounded shadow px-6 py-3 w-full md:w-[228px] hover:from-amber-600 hover:to-yellow-600 transition-all duration-300"
+              >
+                Claim Your Spot
+              </a>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="relative w-full h-[400px] lg:h-[500px] rounded-2xl overflow-hidden"
+            >
+              <img
+                src="/media/ChatGPT Image Nov 24, 2025, 10_14_07 AM.png"
+                alt="Master the Markets Challenge"
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* QIQT - Quantrock Investor Qualification Test */}
+      <section className="w-full bg-gradient-to-b from-[#1a1f4d] to-[#0a0e27] flex justify-center py-16">
+        <div className="w-[85%] mx-auto px-0">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.6 }}
+              className="flex flex-col text-center md:text-start items-start justify-center gap-5"
+            >
+              <div className="flex w-fit h-fit justify-center items-center gap-2 rounded-full border border-amber-400 px-3 py-2 bg-amber-500/10">
+                <Star className="w-4 h-4 text-amber-400" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-400 text-xs font-bold">QIQT</span>
+              </div>
+
+              <div className="w-full font-bold text-3xl md:text-4xl leading-tight">
+                <span className="text-white">Quantrock Investor Qualification Test </span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-400">(QIQT)</span>
+              </div>
+
+              <div className="flex flex-col gap-4 w-full">
+                <div className="text-white text-lg leading-relaxed">
+                  QIQT is an intelligent qualification test built on <span className="font-bold text-amber-400">OECD, MIT, and CFA standards</span>, designed to measure your investment experience, financial literacy, motivations, and readiness to learn.
+                </div>
+                <div className="text-gray-300 text-base leading-relaxed">
+                  QIQT helps you assess your financial knowledge, investment background, and determine your ideal path inside Quantrock—whether in challenges, daily lessons, or selecting the appropriate demo portfolio size.
+                </div>
+              </div>
+
+              <div className="w-full mt-2">
+                <div className="flex items-center gap-2 mb-4">
+                  <Target className="w-5 h-5 text-amber-400" />
+                  <span className="text-white font-bold text-lg">What is the purpose of QIQT?</span>
+                </div>
+                <p className="text-gray-300 text-base mb-4">
+                  The test aims to accurately classify the user into one of the following levels: <span className="text-amber-400 font-semibold">Beginner / Intermediate / Advanced</span>
+                </p>
+                <p className="text-gray-400 text-sm mb-3">It works on identifying:</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {[
+                    'Investment objectives',
+                    'Investment experience',
+                    'Financial knowledge and literacy',
+                    'Readiness and willingness to learn',
+                    'Appropriate challenge level',
+                    'Simulated portfolio size',
+                    'Best learning path',
+                    'Motivation for using Quantrock'
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center gap-2 text-gray-300 text-sm">
+                      <div className="w-1.5 h-1.5 rounded-full bg-amber-400"></div>
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <a
+                href="/app"
+                className="inline-flex gap-2 whitespace-nowrap text-sm md:mt-4 bg-gradient-to-r from-amber-500 to-yellow-500 text-white justify-center items-center text-center font-bold rounded shadow px-6 py-3 w-full md:w-[228px] hover:from-amber-600 hover:to-yellow-600 transition-all duration-300"
+              >
+                Take the Test
+              </a>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="relative w-full flex items-center justify-center"
+            >
+              <div className="relative w-full max-w-md">
+                {/* Decorative elements */}
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-yellow-500/10 rounded-3xl blur-3xl"></div>
+                <div className="relative bg-gradient-to-br from-[#1a1f4d]/80 to-[#2d1b4e]/60 backdrop-blur-sm rounded-3xl p-8 border border-amber-500/20">
+                  <div className="flex flex-col items-center text-center gap-6">
+                    <div className="w-24 h-24 rounded-full bg-gradient-to-br from-amber-500 to-yellow-500 flex items-center justify-center">
+                      <Star className="w-12 h-12 text-white" />
+                    </div>
+                    <div className="text-2xl font-bold text-white">Your Level</div>
+                    <div className="flex gap-3">
+                      <div className="px-4 py-2 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 text-sm font-medium">Beginner</div>
+                      <div className="px-4 py-2 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-sm font-medium">Intermediate</div>
+                      <div className="px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-400 text-sm font-medium">Advanced</div>
+                    </div>
+                    <div className="text-gray-400 text-sm">Discover your investment level</div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -2712,9 +2867,7 @@ export function QuantrockLanding() {
             </p>
 
             <motion.a
-              href="https://quantrock.app.link/X6mJ3n3GGVb"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/app"
               className="inline-block relative group"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
