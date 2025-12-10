@@ -1672,7 +1672,7 @@ export function QuantrockLanding() {
       </section>
 
       {/* Master the Markets - 28-Day Skill Challenge */}
-      <section className="w-full bg-gradient-to-b from-[#0a0e27] to-[#1a1f4d] flex justify-center py-10">
+      {/* <section className="w-full bg-gradient-to-b from-[#0a0e27] to-[#1a1f4d] flex justify-center py-10">
         <div className="w-[85%] mx-auto px-0">
           <div className="grid lg:grid-cols-[65%_35%] gap-8 items-center">
             <motion.div
@@ -1723,17 +1723,17 @@ export function QuantrockLanding() {
               className="relative w-full h-[400px] lg:h-[500px] rounded-2xl overflow-hidden"
             >
               <img
-                src="/media/ChatGPT Image Nov 24, 2025, 10_14_07 AM.png"
+                src="https://challenge.quantrock.com/ChatGPT%20Image%20Nov%2024,%202025,%2010_14_07%20AM.png"
                 alt="Master the Markets Challenge"
                 className="w-full h-full object-cover"
               />
             </motion.div>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      {/* QIQT - Quantrock Investor Qualification Test */}
-      <section className="w-full bg-gradient-to-b from-[#1a1f4d] to-[#0a0e27] flex justify-center py-16">
+      {/* QIQT - Quantrock Investor Qualification Test - HIDDEN */}
+      {false && <section className="w-full bg-gradient-to-b from-[#1a1f4d] to-[#0a0e27] flex justify-center py-16">
         <div className="w-[85%] mx-auto px-0">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -1826,7 +1826,7 @@ export function QuantrockLanding() {
             </motion.div>
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* Investment Legends Quotes Slider */}
       <section className="relative py-24 bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] overflow-hidden">

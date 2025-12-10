@@ -1,13 +1,22 @@
-import { Menu, ChevronDown, Globe } from 'lucide-react';
+import { Menu, ChevronDown, Globe, User, LogOut, LayoutDashboard } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage, languages } from '../contexts/LanguageContext';
 import { useTranslation } from '../translations';
+import { useAuth } from '../contexts/AuthContext';
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [langOpen, setLangOpen] = useState<boolean>(false);
+  const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
   const { language, setLanguage } = useLanguage();
   const t = useTranslation(language);
+  const { user, profile, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    setUserMenuOpen(false);
+  };
 
   return (
     <nav className="fixed top-0 w-full bg-[#0A0F1C]/95 backdrop-blur-md z-50 border-b border-purple-500/20 transition-all duration-300">
@@ -20,12 +29,14 @@ export function Header() {
         <div className="hidden md:flex items-center gap-8">
           <a href="/#features" className="text-gray-300 hover:text-white transition-colors font-medium">{t.nav.features.toUpperCase()}</a>
           <a href="/#how-it-works" className="text-gray-300 hover:text-white transition-colors font-medium">{t.nav.howItWorks.toUpperCase()}</a>
-          <a href="/#gallery" className="text-gray-300 hover:text-white transition-colors font-medium">{t.nav.gallery.toUpperCase()}</a>
+          {/* <a href="/#gallery" className="text-gray-300 hover:text-white transition-colors font-medium">{t.nav.gallery.toUpperCase()}</a> */}
           <a href="/app" className="text-gray-300 hover:text-white transition-colors font-medium">APP</a>
+          <a href="/webinars" className="text-gray-300 hover:text-white transition-colors font-medium">WEBINARS</a>
           <a href="/#about" className="text-gray-300 hover:text-white transition-colors font-medium">{t.nav.about.toUpperCase()}</a>
           {/* <a href="/challenge" className="text-gray-300 hover:text-white transition-colors font-medium">{t.nav.challenge.toUpperCase()}</a> */}
         </div>
         <div className="hidden md:flex items-center gap-4">
+          {/* Language Selector */}
           <div className="relative">
             <button
               onClick={() => setLangOpen(!langOpen)}
@@ -55,13 +66,71 @@ export function Header() {
               </div>
             )}
           </div>
-          <a
-            href="/app"
-            className="bg-gradient-to-r from-[#A855F7] to-[#3B82F6] hover:from-[#C084FC] hover:to-[#60A5FA] text-white px-6 py-2.5 rounded-full font-semibold transition-all duration-300 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
-          >
-            {t.nav.downloadApp}
-          </a>
+
+          {/* Auth Buttons */}
+          {user ? (
+            <div className="relative">
+              <button
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-black/40 border border-purple-500/30 hover:bg-purple-600/20 transition-all duration-300"
+              >
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">
+                    {profile?.full_name?.charAt(0)?.toUpperCase() || 'U'}
+                  </span>
+                </div>
+                <span className="text-gray-300 font-medium hidden lg:inline">
+                  {profile?.full_name?.split(' ')[0] || 'User'}
+                </span>
+                <ChevronDown className={`w-4 h-4 text-purple-400 transition-transform duration-300 ${userMenuOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {userMenuOpen && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-black/95 backdrop-blur-xl rounded-xl border border-purple-500/30 shadow-2xl shadow-purple-500/20 overflow-hidden z-50">
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setUserMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 transition-all duration-300 border-b border-purple-500/10"
+                  >
+                    <LayoutDashboard className="w-4 h-4" />
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/dashboard/profile"
+                    onClick={() => setUserMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 transition-all duration-300 border-b border-purple-500/10"
+                  >
+                    <User className="w-4 h-4" />
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-red-400 hover:bg-red-500/10 transition-all duration-300"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <Link
+                to="/login"
+                className="text-gray-300 hover:text-white transition-colors font-medium px-4 py-2"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="bg-gradient-to-r from-[#A855F7] to-[#3B82F6] hover:from-[#C084FC] hover:to-[#60A5FA] text-white px-6 py-2.5 rounded-full font-semibold transition-all duration-300 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
+              >
+                Sign Up
+              </Link>
+            </div>
+          )}
         </div>
+
+        {/* Mobile Menu */}
         <div className="md:hidden flex items-center gap-3">
           <div className="relative">
             <button
@@ -122,12 +191,12 @@ export function Header() {
                 >
                   {t.nav.howItWorks}
                 </a>
-                <a
+                {/* <a
                   href="/#gallery"
                   className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 transition-all duration-300 border-b border-purple-500/10 last:border-b-0"
                 >
                   {t.nav.gallery}
-                </a>
+                </a> */}
                 <a
                   href="/#about"
                   className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 transition-all duration-300 border-b border-purple-500/10 last:border-b-0"
@@ -139,6 +208,12 @@ export function Header() {
                   className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 transition-all duration-300 border-b border-purple-500/10 last:border-b-0"
                 >
                   App
+                </a>
+                <a
+                  href="/webinars"
+                  className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 transition-all duration-300 border-b border-purple-500/10 last:border-b-0"
+                >
+                  Webinars
                 </a>
                 {/* <a
                   href="/challenge"
@@ -154,16 +229,45 @@ export function Header() {
                 </a>
                 <a
                   href="/affiliate"
-                  className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 transition-all duration-300 border-b border-purple-500/10 last:border-b-0"
+                  className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 transition-all duration-300 border-b border-purple-500/10"
                 >
                   {t.nav.affiliate}
                 </a>
-                <a
-                  href="/app"
-                  className="block px-4 py-3 text-purple-400 font-semibold hover:text-purple-300 hover:bg-purple-600/20 transition-all duration-300"
-                >
-                  {t.nav.downloadApp}
-                </a>
+
+                {/* Auth Links in Mobile Menu */}
+                {user ? (
+                  <>
+                    <Link
+                      to="/dashboard"
+                      className="flex items-center gap-2 px-4 py-3 text-purple-400 font-semibold hover:text-purple-300 hover:bg-purple-600/20 transition-all duration-300 border-b border-purple-500/10"
+                    >
+                      <LayoutDashboard className="w-4 h-4" />
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={handleSignOut}
+                      className="w-full flex items-center gap-2 px-4 py-3 text-gray-300 hover:text-red-400 hover:bg-red-500/10 transition-all duration-300"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-600/20 transition-all duration-300 border-b border-purple-500/10"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/signup"
+                      className="block px-4 py-3 text-purple-400 font-semibold hover:text-purple-300 hover:bg-purple-600/20 transition-all duration-300"
+                    >
+                      Sign Up
+                    </Link>
+                  </>
+                )}
               </div>
             )}
           </div>

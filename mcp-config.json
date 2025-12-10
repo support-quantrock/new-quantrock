@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "claude": {
+      "command": "node",
+      "args": ["./mcp-server/index.js"],
+      "env": {
+        "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}"
+      }
+    }
+  }
+}
