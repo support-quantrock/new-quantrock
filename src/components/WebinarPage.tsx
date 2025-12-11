@@ -73,7 +73,7 @@ export function WebinarPage() {
               {/* Right Side - Content (shows first on mobile) */}
               <div className="order-1 lg:order-2 text-right" dir="rtl">
                 {/* Badge */}
-                <div className="inline-block mb-3 sm:mb-4">
+                <div className="inline-block mb-3 sm:mb-4 pt-4 sm:pt-6">
                   <span className="text-[#f5a623] text-base sm:text-lg font-medium">
                     دعوة لحضور ندوة
                   </span>
@@ -84,13 +84,8 @@ export function WebinarPage() {
                   استراتيجيات كبـــار المستثمرين والبنوك الاستثمارية
                 </h1>
 
-                {/* Description */}
-                <p className="text-gray-300 mb-6 sm:mb-8 text-base sm:text-lg leading-relaxed">
-                  قم بتسجيل حضورك الآن في هذه الندوة المميّزة ولا تفوّت فرصة الاستفادة من أمهر الخبراء في التداول بالسوق الأمريكي
-                </p>
-
-                {/* Info Bar */}
-                <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-3 sm:gap-6 mb-6 sm:mb-8">
+                {/* Info Bar - 2 columns on mobile, row on desktop */}
+                <div className="grid grid-cols-2 sm:flex sm:flex-row sm:flex-wrap items-start sm:items-center gap-2 sm:gap-6 mb-4 sm:mb-6">
                   <div className="flex items-center gap-2">
                     <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 text-[#f5a623]" />
                     <span className="text-white font-medium text-sm sm:text-base">مجاناً</span>
@@ -108,6 +103,18 @@ export function WebinarPage() {
                     <span className="text-white text-sm sm:text-base">عبر الإنترنت</span>
                   </div>
                 </div>
+
+                {/* Webinar Image */}
+                <img
+                  src="/media/webinar-dec2025.jpg"
+                  alt="Webinar"
+                  className="w-full max-w-xs rounded-lg object-cover border-2 border-[#f5a623]/30 mb-4 sm:mb-6 mx-auto"
+                />
+
+                {/* Description */}
+                <p className="text-gray-300 mb-6 sm:mb-8 text-base sm:text-lg leading-relaxed">
+                  قم بتسجيل حضورك الآن في هذه الندوة المميّزة ولا تفوّت فرصة الاستفادة من أمهر الخبراء في التداول بالسوق الأمريكي
+                </p>
 
                 {/* Description Text - Hidden on mobile */}
                 <div className="hidden sm:block bg-white/5 backdrop-blur rounded-lg p-4 sm:p-6 mb-6 sm:mb-8 border border-white/10">
@@ -280,15 +287,15 @@ export function WebinarPage() {
         </div>
 
         {/* Presenter Section */}
-        <div className="bg-white py-8 sm:py-12">
+        <div className="bg-[#1a2744] py-8 sm:py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="text-right mb-6 sm:mb-8" dir="rtl">
-              <h2 className="text-xl sm:text-2xl font-bold text-[#1a2744] inline-block border-r-4 border-[#f5a623] pr-4">
+              <h2 className="text-xl sm:text-2xl font-bold text-white inline-block border-r-4 border-[#f5a623] pr-4">
                 المحاضرون
               </h2>
             </div>
 
-            <div className="bg-gray-50 rounded-lg p-4 sm:p-6 flex flex-col md:flex-row items-center gap-4 sm:gap-6" dir="rtl">
+            <div className="bg-white/10 backdrop-blur rounded-lg p-4 sm:p-6 flex flex-col md:flex-row items-center gap-4 sm:gap-6 border border-white/20" dir="rtl">
               {/* Presenter Image */}
               <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-[#f5a623] to-[#e09515] flex items-center justify-center overflow-hidden flex-shrink-0">
                 <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-gray-300 flex items-center justify-center">
@@ -299,9 +306,9 @@ export function WebinarPage() {
               {/* Presenter Info */}
               <div className="flex-1 text-right text-center md:text-right">
                 <p className="text-[#f5a623] text-xs sm:text-sm mb-1">المحاضر</p>
-                <h3 className="text-lg sm:text-xl font-bold text-[#1a2744] mb-2">فريق QUANTROCK</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-2">فريق QUANTROCK</h3>
                 <div className="w-16 h-1 bg-[#f5a623] mb-3 mx-auto md:mx-0 md:mr-0"></div>
-                <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
+                <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
                   محللون محترفون للأسواق المالية وخبراء في تداول الأسواق المالية منذ 10 سنوات.
                   قدموا العديد من استراتيجيات التداول الناجحة بالإضافة إلى التحليلات الدورية للأسواق المالية.
                 </p>
@@ -325,17 +332,17 @@ export function WebinarPage() {
             {/* Bottom Info */}
             <div className="mt-6 sm:mt-8 flex flex-wrap justify-center gap-6 sm:gap-8 text-center" dir="rtl">
               <div>
-                <p className="text-gray-500 text-xs sm:text-sm">التاريخ</p>
-                <p className="text-[#1a2744] font-bold text-sm sm:text-base">السبت 13 ديسمبر</p>
-                <p className="text-gray-600 text-xs sm:text-sm">08:30 م</p>
+                <p className="text-gray-400 text-xs sm:text-sm">التاريخ</p>
+                <p className="text-white font-bold text-sm sm:text-base">السبت 13 ديسمبر</p>
+                <p className="text-gray-300 text-xs sm:text-sm">08:30 م</p>
               </div>
               <div>
-                <p className="text-gray-500 text-xs sm:text-sm">المدة</p>
-                <p className="text-[#1a2744] font-bold text-sm sm:text-base">120 دقيقة</p>
+                <p className="text-gray-400 text-xs sm:text-sm">المدة</p>
+                <p className="text-white font-bold text-sm sm:text-base">120 دقيقة</p>
               </div>
               <div>
-                <p className="text-gray-500 text-xs sm:text-sm">السعر</p>
-                <p className="text-[#1a2744] font-bold text-sm sm:text-base">مجاناً</p>
+                <p className="text-gray-400 text-xs sm:text-sm">السعر</p>
+                <p className="text-white font-bold text-sm sm:text-base">مجاناً</p>
               </div>
             </div>
           </div>

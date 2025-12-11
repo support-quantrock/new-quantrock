@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   Users,
@@ -17,19 +17,21 @@ interface DashboardSidebarProps {
 }
 
 const menuItems = [
-  { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { path: '/dashboard/referrals', icon: Users, label: 'Referrals' },
-  { path: '/dashboard/earnings', icon: DollarSign, label: 'Earnings' },
-  { path: '/dashboard/webinars', icon: Video, label: 'Webinars' },
-  { path: '/dashboard/profile', icon: User, label: 'Profile' },
+  { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', adminOnly: false },
+  { path: '/dashboard/referrals', icon: Users, label: 'Referrals', adminOnly: false },
+  { path: '/dashboard/earnings', icon: DollarSign, label: 'Earnings', adminOnly: false },
+  { path: '/dashboard/webinars', icon: Video, label: 'Webinars', adminOnly: true },
+  { path: '/dashboard/profile', icon: User, label: 'Profile', adminOnly: false },
 ];
 
 export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
   const location = useLocation();
+  const navigate = useNavigate();
   const { signOut, profile } = useAuth();
 
   const handleSignOut = async () => {
     await signOut();
+    navigate('/login');
   };
 
   return (
@@ -89,27 +91,29 @@ export function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
 
           {/* Navigation */}
           <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-            {menuItems.map((item) => {
-              const isActive = location.pathname === item.path;
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={onClose}
-                  className={`
-                    flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
-                    ${isActive
-                      ? 'bg-gradient-to-r from-purple-600/30 to-blue-600/20 text-white border border-purple-500/30'
-                      : 'text-gray-400 hover:text-white hover:bg-purple-500/10'
-                    }
-                  `}
-                >
-                  <item.icon className={`w-5 h-5 ${isActive ? 'text-purple-400' : ''}`} />
-                  <span className="font-medium">{item.label}</span>
-                  {isActive && <ChevronRight className="w-4 h-4 ml-auto text-purple-400" />}
-                </Link>
-              );
-            })}
+            {menuItems
+              .filter((item) => !item.adminOnly || profile?.role === 'admin')
+              .map((item) => {
+                const isActive = location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={onClose}
+                    className={`
+                      flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
+                      ${isActive
+                        ? 'bg-gradient-to-r from-purple-600/30 to-blue-600/20 text-white border border-purple-500/30'
+                        : 'text-gray-400 hover:text-white hover:bg-purple-500/10'
+                      }
+                    `}
+                  >
+                    <item.icon className={`w-5 h-5 ${isActive ? 'text-purple-400' : ''}`} />
+                    <span className="font-medium">{item.label}</span>
+                    {isActive && <ChevronRight className="w-4 h-4 ml-auto text-purple-400" />}
+                  </Link>
+                );
+              })}
           </nav>
 
           {/* Sign Out */}

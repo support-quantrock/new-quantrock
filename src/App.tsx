@@ -17,6 +17,7 @@ import { LoginPage } from './components/auth/LoginPage';
 import { SignupPage } from './components/auth/SignupPage';
 import { ForgotPasswordPage } from './components/auth/ForgotPasswordPage';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { AdminRoute } from './components/auth/AdminRoute';
 
 // Dashboard Pages
 import { DashboardLayout } from './components/dashboard/DashboardLayout';
@@ -62,7 +63,7 @@ function App() {
               <Route path="referrals" element={<ReferralsPage />} />
               <Route path="earnings" element={<EarningsPage />} />
               <Route path="profile" element={<ProfilePage />} />
-              <Route path="webinars" element={<WebinarDashboard />} />
+              <Route path="webinars" element={<AdminRoute><WebinarDashboard /></AdminRoute>} />
             </Route>
           </Routes>
         </BrowserRouter>
