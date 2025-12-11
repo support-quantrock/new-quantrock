@@ -159,11 +159,11 @@ export function WebinarPage() {
     <PageLayout>
       <div className="min-h-screen bg-[#1a2744]">
         {/* Top Banner Image */}
-        <div className="pt-16 sm:pt-20">
+        <div className="pt-16 sm:pt-20 max-w-7xl mx-auto px-4 sm:px-6">
           <img
             src="/media/Gemini_Generated_Image_tfyv6dtfyv6dtfyv.jpg"
             alt="Webinar Banner - استراتيجيات كبار المستثمرين"
-            className="w-full h-auto object-cover"
+            className="w-full h-auto object-cover rounded-lg"
           />
         </div>
 
