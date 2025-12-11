@@ -9,8 +9,14 @@ import {
   Copy,
   CheckCircle,
   ArrowRight,
-  ExternalLink
+  ExternalLink,
+  Video,
+  Share2,
+  QrCode,
+  Save,
+  Loader2
 } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase, Referral } from '../../lib/supabase';
 
@@ -31,10 +37,19 @@ export function DashboardHome() {
   });
   const [recentReferrals, setRecentReferrals] = useState<Referral[]>([]);
   const [copied, setCopied] = useState(false);
+  const [copiedWebinar, setCopiedWebinar] = useState(false);
+  const [showWebinarQR, setShowWebinarQR] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [redirectUrl, setRedirectUrl] = useState('');
+  const [savingRedirectUrl, setSavingRedirectUrl] = useState(false);
+  const [redirectUrlSaved, setRedirectUrlSaved] = useState(false);
 
   const referralLink = profile?.referral_code
     ? `${window.location.origin}/signup?ref=${profile.referral_code}`
+    : '';
+
+  const webinarReferralLink = profile?.referral_code
+    ? `${window.location.origin}/webinars?ref=${profile.referral_code}`
     : '';
 
   useEffect(() => {
@@ -43,6 +58,13 @@ export function DashboardHome() {
       fetchRecentReferrals();
     }
   }, [user]);
+
+  // Load redirect URL from profile
+  useEffect(() => {
+    if (profile?.custom_url) {
+      setRedirectUrl(profile.custom_url);
+    }
+  }, [profile]);
 
   const fetchStats = async () => {
     try {
@@ -107,6 +129,72 @@ export function DashboardHome() {
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       console.error('Failed to copy:', error);
+    }
+  };
+
+  const copyWebinarLink = async () => {
+    try {
+      await navigator.clipboard.writeText(webinarReferralLink);
+      setCopiedWebinar(true);
+      setTimeout(() => setCopiedWebinar(false), 2000);
+    } catch (error) {
+      console.error('Failed to copy:', error);
+    }
+  };
+
+  const shareWebinarLink = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Join our Free Webinar',
+          text: 'Join our free webinar on investment strategies!',
+          url: webinarReferralLink,
+        });
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      copyWebinarLink();
+    }
+  };
+
+  const saveRedirectUrl = async () => {
+    if (!user) return;
+
+    setSavingRedirectUrl(true);
+    setRedirectUrlSaved(false);
+
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+      const response = await fetch(
+        `${supabaseUrl}/rest/v1/profiles?id=eq.${user.id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'apikey': supabaseKey,
+            'Authorization': `Bearer ${supabaseKey}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal',
+          },
+          body: JSON.stringify({
+            custom_url: redirectUrl.trim() || null,
+            updated_at: new Date().toISOString()
+          }),
+        }
+      );
+
+      if (response.ok) {
+        setRedirectUrlSaved(true);
+        setTimeout(() => setRedirectUrlSaved(false), 2000);
+      } else {
+        console.error('Failed to save redirect URL');
+      }
+    } catch (error) {
+      console.error('Error saving redirect URL:', error);
+    } finally {
+      setSavingRedirectUrl(false);
     }
   };
 
@@ -217,6 +305,119 @@ export function DashboardHome() {
               )}
             </button>
           </div>
+        </div>
+      </motion.div>
+
+      {/* Webinar Referral Link Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.45 }}
+        className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20"
+      >
+        <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <Video className="w-5 h-5 text-[#f5a623]" />
+          Webinar Referral Link
+        </h2>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Webinar Link */}
+          <div className="space-y-4">
+            {/* Webinar Referral Link */}
+            <div>
+              <label className="block text-sm text-gray-400 mb-2">Webinar Registration Link</label>
+              <div className="flex items-center gap-2">
+                <div className="flex-1 px-4 py-3 bg-black/40 rounded-xl border border-purple-500/30 text-gray-300 text-sm truncate">
+                  {webinarReferralLink}
+                </div>
+                <button
+                  onClick={copyWebinarLink}
+                  className="px-4 py-3 bg-[#f5a623] hover:bg-[#e09515] text-white rounded-xl transition-colors"
+                >
+                  {copiedWebinar ? <CheckCircle className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <button
+                onClick={shareWebinarLink}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[#f5a623] to-purple-600 hover:from-[#e09515] hover:to-purple-700 text-white font-medium rounded-xl transition-all"
+              >
+                <Share2 className="w-5 h-5" />
+                Share Webinar Link
+              </button>
+              <button
+                onClick={() => setShowWebinarQR(!showWebinarQR)}
+                className="px-4 py-3 bg-black/40 border border-purple-500/30 hover:bg-purple-500/10 text-white rounded-xl transition-colors"
+              >
+                <QrCode className="w-5 h-5" />
+              </button>
+            </div>
+
+            <p className="text-gray-500 text-sm">
+              Share this link to invite people to register for the upcoming webinar with your referral code.
+            </p>
+          </div>
+
+          {/* Webinar QR Code */}
+          <div className={`flex items-center justify-center ${showWebinarQR ? '' : 'hidden md:flex'}`}>
+            <div className="bg-white p-4 rounded-xl">
+              <QRCodeSVG
+                value={webinarReferralLink}
+                size={180}
+                level="H"
+                includeMargin={true}
+              />
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Your App Referral Link Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.48 }}
+        className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 backdrop-blur-sm rounded-2xl p-6 border border-[#f5a623]/30"
+      >
+        <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <ExternalLink className="w-5 h-5 text-[#f5a623]" />
+          Your App Referral Link
+        </h2>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm text-gray-400 mb-2">
+              Where should users be redirected after registering via your webinar link?
+            </label>
+            <div className="flex items-center gap-2">
+              <input
+                type="url"
+                value={redirectUrl}
+                onChange={(e) => setRedirectUrl(e.target.value)}
+                placeholder="https://your-website.com/thank-you"
+                className="flex-1 px-4 py-3 bg-black/40 rounded-xl border border-purple-500/30 text-white placeholder-gray-500 focus:outline-none focus:border-[#f5a623]"
+              />
+              <button
+                onClick={saveRedirectUrl}
+                disabled={savingRedirectUrl}
+                className="px-4 py-3 bg-[#f5a623] hover:bg-[#e09515] disabled:bg-gray-600 text-white rounded-xl transition-colors flex items-center gap-2"
+              >
+                {savingRedirectUrl ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : redirectUrlSaved ? (
+                  <CheckCircle className="w-5 h-5" />
+                ) : (
+                  <Save className="w-5 h-5" />
+                )}
+              </button>
+            </div>
+          </div>
+          <p className="text-gray-500 text-sm">
+            When someone registers for the webinar using your referral link, they will be redirected to this URL after successful registration. Leave empty to redirect to the app download page.
+          </p>
         </div>
       </motion.div>
 

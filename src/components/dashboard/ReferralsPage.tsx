@@ -242,8 +242,8 @@ export function ReferralsPage() {
         ))}
       </div>
 
-      {/* Referral Link Section */}
-      <motion.div
+      {/* Referral Link Section - Hidden */}
+      {/* <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
@@ -255,9 +255,7 @@ export function ReferralsPage() {
         </h2>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Link & Code */}
           <div className="space-y-4">
-            {/* Referral Link */}
             <div>
               <label className="block text-sm text-gray-400 mb-2">Referral Link</label>
               <div className="flex items-center gap-2">
@@ -273,7 +271,6 @@ export function ReferralsPage() {
               </div>
             </div>
 
-            {/* Referral Code */}
             <div>
               <label className="block text-sm text-gray-400 mb-2">Referral Code</label>
               <div className="flex items-center gap-2">
@@ -289,7 +286,6 @@ export function ReferralsPage() {
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex gap-3">
               <button
                 onClick={shareLink}
@@ -307,7 +303,6 @@ export function ReferralsPage() {
             </div>
           </div>
 
-          {/* QR Code */}
           <div className={`flex items-center justify-center ${showQR ? '' : 'hidden md:flex'}`}>
             <div className="bg-white p-4 rounded-xl">
               <QRCodeSVG
@@ -319,10 +314,10 @@ export function ReferralsPage() {
             </div>
           </div>
         </div>
-      </motion.div>
+      </motion.div> */}
 
-      {/* Webinar Referral Link Section */}
-      <motion.div
+      {/* Webinar Referral Link Section - Moved to Dashboard */}
+      {/* <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.45 }}
@@ -334,9 +329,7 @@ export function ReferralsPage() {
         </h2>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Webinar Link */}
           <div className="space-y-4">
-            {/* Webinar Referral Link */}
             <div>
               <label className="block text-sm text-gray-400 mb-2">Webinar Registration Link</label>
               <div className="flex items-center gap-2">
@@ -352,7 +345,6 @@ export function ReferralsPage() {
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex gap-3">
               <button
                 onClick={shareWebinarLink}
@@ -374,7 +366,6 @@ export function ReferralsPage() {
             </p>
           </div>
 
-          {/* Webinar QR Code */}
           <div className={`flex items-center justify-center ${showWebinarQR ? '' : 'hidden md:flex'}`}>
             <div className="bg-white p-4 rounded-xl">
               <QRCodeSVG
@@ -386,10 +377,10 @@ export function ReferralsPage() {
             </div>
           </div>
         </div>
-      </motion.div>
+      </motion.div> */}
 
-      {/* Webinar Redirect URL Section */}
-      <motion.div
+      {/* Your App Referral Link Section - Moved to Dashboard */}
+      {/* <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.48 }}
@@ -397,7 +388,7 @@ export function ReferralsPage() {
       >
         <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
           <ExternalLink className="w-5 h-5 text-[#f5a623]" />
-          Webinar Redirect URL
+          Your App Referral Link
         </h2>
 
         <div className="space-y-4">
@@ -432,7 +423,7 @@ export function ReferralsPage() {
             When someone registers for the webinar using your referral link, they will be redirected to this URL after successful registration. Leave empty to redirect to the app download page.
           </p>
         </div>
-      </motion.div>
+      </motion.div> */}
 
       {/* Referrals Table */}
       <motion.div
