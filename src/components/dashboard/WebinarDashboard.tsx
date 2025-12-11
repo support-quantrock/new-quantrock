@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, Mail, Phone, Calendar, Download, Search, RefreshCw, MapPin } from 'lucide-react';
+import { Users, Mail, Phone, Calendar, Download, Search, RefreshCw, MapPin, Video, Link2 } from 'lucide-react';
 
 interface WebinarRegistration {
   id: string;
@@ -8,8 +8,15 @@ interface WebinarRegistration {
   mobile: string;
   country: string;
   webinar_id: string;
+  referrer_code: string | null;
   created_at: string;
+  referrer_name?: string;
 }
+
+// Map webinar IDs to names and dates
+const webinarInfo: Record<string, { name: string; date: string }> = {
+  'dec-2025': { name: 'ندوة ديسمبر 2025', date: '13 ديسمبر 2025' },
+};
 
 export function WebinarDashboard() {
   const [registrations, setRegistrations] = useState<WebinarRegistration[]>([]);
@@ -37,6 +44,35 @@ export function WebinarDashboard() {
         console.error('Error fetching registrations:', response.statusText);
       } else {
         const data = await response.json();
+
+        // Fetch referrer names for registrations with referrer_code
+        const referrerCodes = [...new Set(data.filter((r: WebinarRegistration) => r.referrer_code).map((r: WebinarRegistration) => r.referrer_code))];
+
+        if (referrerCodes.length > 0) {
+          const profilesResponse = await fetch(
+            `${supabaseUrl}/rest/v1/profiles?referral_code=in.(${referrerCodes.map(c => `"${c}"`).join(',')})&select=referral_code,full_name`,
+            {
+              headers: {
+                'apikey': supabaseKey,
+                'Authorization': `Bearer ${supabaseKey}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+
+          if (profilesResponse.ok) {
+            const profiles = await profilesResponse.json();
+            const referrerMap = new Map(profiles.map((p: { referral_code: string; full_name: string }) => [p.referral_code, p.full_name]));
+
+            // Add referrer names to registrations
+            data.forEach((reg: WebinarRegistration) => {
+              if (reg.referrer_code && referrerMap.has(reg.referrer_code)) {
+                reg.referrer_name = referrerMap.get(reg.referrer_code) as string;
+              }
+            });
+          }
+        }
+
         setRegistrations(data || []);
       }
     } catch (err) {
@@ -51,7 +87,7 @@ export function WebinarDashboard() {
   }, []);
 
   const exportToCSV = () => {
-    const headers = ['Name', 'Email', 'Mobile', 'Country', 'Webinar ID', 'Registered At'];
+    const headers = ['Name', 'Email', 'Mobile', 'Country', 'Webinar Name', 'Webinar Date', 'Referrer Code', 'Registered At'];
     const csvContent = [
       headers.join(','),
       ...filteredRegistrations.map(reg =>
@@ -60,7 +96,9 @@ export function WebinarDashboard() {
           reg.email,
           reg.mobile,
           `"${reg.country}"`,
-          reg.webinar_id,
+          `"${webinarInfo[reg.webinar_id]?.name || reg.webinar_id}"`,
+          `"${webinarInfo[reg.webinar_id]?.date || '-'}"`,
+          reg.referrer_code || '-',
           new Date(reg.created_at).toLocaleString()
         ].join(',')
       )
@@ -152,6 +190,8 @@ export function WebinarDashboard() {
                   <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Email</th>
                   <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Mobile</th>
                   <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Country</th>
+                  <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Webinar</th>
+                  <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Referrer</th>
                   <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Registered</th>
                 </tr>
               </thead>
@@ -185,6 +225,32 @@ export function WebinarDashboard() {
                         <MapPin className="w-4 h-4" />
                         {reg.country}
                       </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm">
+                        <div className="flex items-center gap-2 text-white font-medium">
+                          <Video className="w-4 h-4 text-purple-400" />
+                          {webinarInfo[reg.webinar_id]?.name || reg.webinar_id}
+                        </div>
+                        <p className="text-gray-500 text-xs mt-1">
+                          {webinarInfo[reg.webinar_id]?.date || '-'}
+                        </p>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      {reg.referrer_code ? (
+                        <div className="text-sm">
+                          {reg.referrer_name && (
+                            <p className="text-white font-medium">{reg.referrer_name}</p>
+                          )}
+                          <div className="flex items-center gap-2 text-[#f5a623]">
+                            <Link2 className="w-4 h-4" />
+                            {reg.referrer_code}
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="text-gray-500 text-sm">-</span>
+                      )}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2 text-gray-400 text-sm">

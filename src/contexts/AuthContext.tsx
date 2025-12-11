@@ -60,34 +60,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Initialize auth state
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id).then(setProfile);
-      }
-      setLoading(false);
-    });
+    let isMounted = true;
 
-    // Listen for auth changes
+    // Set up auth state change listener first
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        if (!isMounted) return;
+
         setSession(session);
         setUser(session?.user ?? null);
 
         if (session?.user) {
           const profile = await fetchProfile(session.user.id);
-          setProfile(profile);
+          if (isMounted) {
+            setProfile(profile);
+          }
         } else {
           setProfile(null);
         }
 
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     );
 
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!isMounted) return;
+
+      setSession(session);
+      setUser(session?.user ?? null);
+
+      if (session?.user) {
+        fetchProfile(session.user.id).then(profile => {
+          if (isMounted) {
+            setProfile(profile);
+            setLoading(false);
+          }
+        });
+      } else {
+        setLoading(false);
+      }
+    });
+
     return () => {
+      isMounted = false;
       subscription.unsubscribe();
     };
   }, []);
@@ -116,7 +134,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       }
 
-      // Sign up user
+      // Sign up user (email confirmation disabled)
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -124,6 +142,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           data: {
             full_name: fullName,
           },
+          emailRedirectTo: undefined,
         },
       });
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Eye, EyeOff, User, UserPlus, AlertCircle, CheckCircle, Gift } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, User, UserPlus, AlertCircle, Gift } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { PageLayout } from '../PageLayout';
 
@@ -16,7 +16,6 @@ export function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
   const { signUp, error, clearError } = useAuth();
   const navigate = useNavigate();
@@ -59,42 +58,12 @@ export function SignupPage() {
     const { error } = await signUp(email, password, fullName, referralCode || undefined);
 
     if (!error) {
-      setIsSuccess(true);
+      // Redirect to dashboard directly (no email confirmation needed)
+      navigate('/dashboard');
     }
 
     setIsLoading(false);
   };
-
-  if (isSuccess) {
-    return (
-      <PageLayout>
-        <div className="min-h-screen bg-gradient-to-b from-[#0A0F1C] via-[#1a1f4d] to-[#0A0F1C] pt-24 pb-16 flex items-center justify-center">
-          <div className="w-full max-w-md px-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="bg-gradient-to-br from-[#1a1f4d]/80 to-[#2d1b4e]/60 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/30 shadow-2xl shadow-purple-500/10 text-center"
-            >
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-green-500/20 flex items-center justify-center">
-                <CheckCircle className="w-10 h-10 text-green-400" />
-              </div>
-              <h2 className="text-2xl font-bold text-white mb-2">Account Created!</h2>
-              <p className="text-gray-400 mb-6">
-                Please check your email to verify your account. Once verified, you can sign in to your dashboard.
-              </p>
-              <Link
-                to="/login"
-                className="inline-block w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
-              >
-                Go to Login
-              </Link>
-            </motion.div>
-          </div>
-        </div>
-      </PageLayout>
-    );
-  }
 
   return (
     <PageLayout>

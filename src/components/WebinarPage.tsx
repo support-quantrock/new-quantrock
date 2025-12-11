@@ -12,7 +12,8 @@ export function WebinarPage() {
     name: '',
     email: '',
     mobile: '',
-    country: 'الإمارات العربية المتحدة'
+    country: 'الإمارات العربية المتحدة',
+    countryCode: '+971'
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -20,11 +21,37 @@ export function WebinarPage() {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [agreeShare, setAgreeShare] = useState(false);
 
-  // Extract referral code from URL
+  // Extract referral code from URL and track click
   useEffect(() => {
     const ref = searchParams.get('ref');
     if (ref) {
-      setReferralCode(ref.toUpperCase());
+      const code = ref.toUpperCase();
+      setReferralCode(code);
+
+      // Track the click in referral_clicks table
+      const trackClick = async () => {
+        try {
+          const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+          const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+          await fetch(`${supabaseUrl}/rest/v1/referral_clicks`, {
+            method: 'POST',
+            headers: {
+              'apikey': supabaseKey,
+              'Authorization': `Bearer ${supabaseKey}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({
+              referral_code: code
+            })
+          });
+        } catch (err) {
+          console.error('Error tracking click:', err);
+        }
+      };
+
+      trackClick();
     }
   }, [searchParams]);
 
@@ -89,9 +116,10 @@ export function WebinarPage() {
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          mobile: formData.mobile,
+          mobile: `${formData.countryCode}${formData.mobile}`,
           country: formData.country,
-          webinar_id: 'dec-2025'
+          webinar_id: 'dec-2025',
+          referrer_code: referralCode || null
         })
       });
 
@@ -169,15 +197,8 @@ export function WebinarPage() {
 
         {/* Hero Section */}
         <div
-          className="relative pb-8 sm:pb-16"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1610375461246-83df859d849d?w=1920&q=80')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
+          className="relative pb-8 sm:pb-16 bg-[#1a2744]"
         >
-          {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-[#1a2744]/90"></div>
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
             <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
@@ -217,9 +238,18 @@ export function WebinarPage() {
                 </div>
 
                 {/* Description */}
-                <p className="text-gray-300 mb-6 sm:mb-8 text-base sm:text-lg leading-relaxed">
+                <p className="text-gray-300 mb-4 sm:mb-6 text-base sm:text-lg leading-relaxed">
                   قم بتسجيل حضورك الآن في هذه الندوة المميّزة ولا تفوّت فرصة الاستفادة من أمهر الخبراء في التداول بالسوق الأمريكي
                 </p>
+
+                {/* Description Text */}
+                <div className="bg-white/5 backdrop-blur rounded-lg p-4 sm:p-6 mb-6 sm:mb-8 border border-white/10">
+                  <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
+                    تعرف على استراتيجيات كبار المستثمرين والبنوك الاستثمارية في السوق الأمريكي.
+                    سنتناول تحركات صناديق التحوط وبيوت الخبرة والبنوك، صفقات المطلعين والكونغرس،
+                    تدفق السيولة، وأقوى التحليلات المالية بالذكاء الاصطناعي.
+                  </p>
+                </div>
 
                 {/* Countdown Timer */}
                 <div className="flex justify-center gap-3 sm:gap-4 mb-6 sm:mb-8" dir="ltr">
@@ -241,15 +271,6 @@ export function WebinarPage() {
                   </div>
                 </div>
 
-                {/* Description Text - Hidden on mobile */}
-                <div className="hidden sm:block bg-white/5 backdrop-blur rounded-lg p-4 sm:p-6 mb-6 sm:mb-8 border border-white/10">
-                  <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
-                    تعرف على استراتيجيات كبار المستثمرين والبنوك الاستثمارية في السوق الأمريكي.
-                    سنتناول تحركات صناديق التحوط وبيوت الخبرة والبنوك، صفقات المطلعين والكونغرس،
-                    تدفق السيولة، وأقوى التحليلات المالية بالذكاء الاصطناعي.
-                  </p>
-                </div>
-
                 {/* Sponsor - Hidden on mobile */}
                 <div className="hidden sm:block text-center">
                   <p className="text-gray-400 mb-3">برعاية</p>
@@ -261,26 +282,26 @@ export function WebinarPage() {
                 </div>
 
                 {/* Promo Banner - Desktop only */}
-                <div className="hidden sm:flex mt-6 bg-white rounded-lg p-4 items-center justify-center gap-3">
+                <div className="hidden sm:flex mt-6 bg-gradient-to-r from-[#1a1f4d] to-[#2d1b4e] rounded-lg p-4 items-center justify-center gap-3 border border-purple-500/30">
                   <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white font-bold">
                     🎁
                   </div>
                   <div className="text-center">
-                    <p className="text-gray-800 font-bold">مفاجأت كبيرة!</p>
-                    <p className="text-gray-700 text-sm">بانتظاركم في نهاية الندوة</p>
+                    <p className="text-white font-bold">مفاجأت كبيرة!</p>
+                    <p className="text-gray-300 text-sm">بانتظاركم في نهاية الندوة</p>
                     <p className="text-[#f5a623] font-bold">اختيار فائز بجائزة اشتراك بريميوم في كوانتروك</p>
                   </div>
                 </div>
               </div>
 
               {/* Promo Banner - Mobile only (above form) */}
-              <div className="sm:hidden order-2 flex bg-white rounded-lg p-3 items-center justify-center gap-3" dir="rtl">
+              <div className="sm:hidden order-2 flex bg-gradient-to-r from-[#1a1f4d] to-[#2d1b4e] rounded-lg p-3 items-center justify-center gap-3 border border-purple-500/30" dir="rtl">
                 <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
                   🎁
                 </div>
                 <div className="text-center">
-                  <p className="text-gray-800 font-bold text-sm">مفاجأت كبيرة!</p>
-                  <p className="text-gray-700 text-xs">بانتظاركم في نهاية الندوة</p>
+                  <p className="text-white font-bold text-sm">مفاجأت كبيرة!</p>
+                  <p className="text-gray-300 text-xs">بانتظاركم في نهاية الندوة</p>
                   <p className="text-[#f5a623] font-bold text-xs">اختيار فائز بجائزة اشتراك بريميوم في كوانتروك</p>
                 </div>
               </div>
@@ -334,9 +355,21 @@ export function WebinarPage() {
                             className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 border border-purple-500/30 rounded bg-black/40 text-white placeholder-gray-400 focus:outline-none focus:border-[#f5a623] focus:ring-1 focus:ring-[#f5a623] transition-all text-right text-sm sm:text-base"
                             placeholder="الهاتف"
                           />
-                          <div className="flex items-center gap-1 px-2 sm:px-3 py-2.5 sm:py-3 border border-purple-500/30 rounded bg-black/40 text-gray-300 text-xs sm:text-sm whitespace-nowrap">
-                            <span>(971+)</span>
-                          </div>
+                          <select
+                            name="countryCode"
+                            value={formData.countryCode}
+                            onChange={handleChange}
+                            className="px-2 sm:px-3 py-2.5 sm:py-3 border border-purple-500/30 rounded bg-black/40 text-white focus:outline-none focus:border-[#f5a623] focus:ring-1 focus:ring-[#f5a623] transition-all text-xs sm:text-sm"
+                          >
+                            <option value="+971">🇦🇪 +971</option>
+                            <option value="+966">🇸🇦 +966</option>
+                            <option value="+965">🇰🇼 +965</option>
+                            <option value="+974">🇶🇦 +974</option>
+                            <option value="+973">🇧🇭 +973</option>
+                            <option value="+968">🇴🇲 +968</option>
+                            <option value="+20">🇪🇬 +20</option>
+                            <option value="+962">🇯🇴 +962</option>
+                          </select>
                         </div>
 
                         <div>
@@ -450,7 +483,7 @@ export function WebinarPage() {
               {/* Presenter Info */}
               <div className="flex-1 text-right">
                 <p className="text-[#f5a623] text-xs sm:text-sm mb-1">المحاضر</p>
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-2">أ. أحمد زغلول</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-2">أ. أحمد العزازي</h3>
                 <div className="w-16 h-1 bg-[#f5a623] mb-3 mr-0"></div>
                 <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
                   محاضر ومصمّم برامج تدريبية في الأسهم الأمريكية والفوركس مع خبرة عملية داخل غرف التداول

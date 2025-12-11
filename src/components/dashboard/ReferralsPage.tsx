@@ -222,24 +222,24 @@ export function ReferralsPage() {
         <p className="text-gray-400">Track and manage your referrals</p>
       </motion.div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Stats Grid - Hidden */}
+      {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         {statCards.map((stat, index) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 backdrop-blur-sm rounded-2xl p-5 border border-purple-500/20"
+            className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 backdrop-blur-sm rounded-2xl p-4 sm:p-5 border border-purple-500/20"
           >
-            <div className={`w-10 h-10 rounded-xl bg-${stat.color}-500/20 flex items-center justify-center mb-3`}>
-              <stat.icon className={`w-5 h-5 text-${stat.color}-400`} style={{ color: stat.color === 'purple' ? '#a855f7' : stat.color === 'green' ? '#22c55e' : stat.color === 'amber' ? '#f59e0b' : '#3b82f6' }} />
+            <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-${stat.color}-500/20 flex items-center justify-center mb-2 sm:mb-3`}>
+              <stat.icon className={`w-4 h-4 sm:w-5 sm:h-5 text-${stat.color}-400`} style={{ color: stat.color === 'purple' ? '#a855f7' : stat.color === 'green' ? '#22c55e' : stat.color === 'amber' ? '#f59e0b' : '#3b82f6' }} />
             </div>
-            <p className="text-gray-400 text-sm">{stat.label}</p>
-            <p className="text-2xl font-bold text-white">{loading ? '...' : stat.value}</p>
+            <p className="text-gray-400 text-xs sm:text-sm">{stat.label}</p>
+            <p className="text-xl sm:text-2xl font-bold text-white">{loading ? '...' : stat.value}</p>
           </motion.div>
         ))}
-      </div>
+      </div> */}
 
       {/* Referral Link Section - Hidden */}
       {/* <motion.div
@@ -429,62 +429,100 @@ export function ReferralsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.55 }}
-        className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20"
+        className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-purple-500/20"
       >
-        <h2 className="text-lg font-bold text-white mb-4">Referral History</h2>
+        <h2 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4">Referral History</h2>
 
         {referrals.length === 0 ? (
-          <div className="text-center py-12">
-            <Users className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-            <p className="text-gray-400 mb-2">No referrals yet</p>
-            <p className="text-gray-500 text-sm">Share your link to start earning commissions!</p>
+          <div className="text-center py-8 sm:py-12">
+            <Users className="w-12 h-12 sm:w-16 sm:h-16 text-gray-600 mx-auto mb-3 sm:mb-4" />
+            <p className="text-gray-400 mb-2 text-sm sm:text-base">No referrals yet</p>
+            <p className="text-gray-500 text-xs sm:text-sm">Share your link to start earning commissions!</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-purple-500/20">
-                  <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">User</th>
-                  <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Date</th>
-                  <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Status</th>
-                  <th className="text-right py-3 px-4 text-gray-400 font-medium text-sm">Commission</th>
-                </tr>
-              </thead>
-              <tbody>
-                {referrals.map((referral) => (
-                  <tr key={referral.id} className="border-b border-purple-500/10 hover:bg-purple-500/5">
-                    <td className="py-4 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
-                          <span className="text-purple-400 font-bold">
-                            {(referral.referred_user as any)?.full_name?.charAt(0)?.toUpperCase() || '?'}
+          <>
+            {/* Desktop Table */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-purple-500/20">
+                    <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">User</th>
+                    <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Date</th>
+                    <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Status</th>
+                    <th className="text-right py-3 px-4 text-gray-400 font-medium text-sm">Commission</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {referrals.map((referral) => (
+                    <tr key={referral.id} className="border-b border-purple-500/10 hover:bg-purple-500/5">
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+                            <span className="text-purple-400 font-bold">
+                              {(referral.referred_user as any)?.full_name?.charAt(0)?.toUpperCase() || '?'}
+                            </span>
+                          </div>
+                          <span className="text-white">
+                            {(referral.referred_user as any)?.full_name || 'Anonymous'}
                           </span>
                         </div>
-                        <span className="text-white">
-                          {(referral.referred_user as any)?.full_name || 'Anonymous'}
+                      </td>
+                      <td className="py-4 px-4 text-gray-400">
+                        {new Date(referral.created_at).toLocaleDateString()}
+                      </td>
+                      <td className="py-4 px-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          referral.status === 'completed' ? 'bg-green-500/20 text-green-400' :
+                          referral.status === 'paid' ? 'bg-blue-500/20 text-blue-400' :
+                          'bg-amber-500/20 text-amber-400'
+                        }`}>
+                          {referral.status}
+                        </span>
+                      </td>
+                      <td className="py-4 px-4 text-right text-white font-medium">
+                        ${referral.commission_amount?.toFixed(2) || '0.00'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="sm:hidden space-y-3">
+              {referrals.map((referral) => (
+                <div key={referral.id} className="bg-black/20 rounded-xl p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center">
+                        <span className="text-purple-400 font-bold text-sm">
+                          {(referral.referred_user as any)?.full_name?.charAt(0)?.toUpperCase() || '?'}
                         </span>
                       </div>
-                    </td>
-                    <td className="py-4 px-4 text-gray-400">
-                      {new Date(referral.created_at).toLocaleDateString()}
-                    </td>
-                    <td className="py-4 px-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        referral.status === 'completed' ? 'bg-green-500/20 text-green-400' :
-                        referral.status === 'paid' ? 'bg-blue-500/20 text-blue-400' :
-                        'bg-amber-500/20 text-amber-400'
-                      }`}>
-                        {referral.status}
+                      <span className="text-white text-sm font-medium">
+                        {(referral.referred_user as any)?.full_name || 'Anonymous'}
                       </span>
-                    </td>
-                    <td className="py-4 px-4 text-right text-white font-medium">
+                    </div>
+                    <span className={`px-2 py-1 rounded-full text-[10px] font-medium ${
+                      referral.status === 'completed' ? 'bg-green-500/20 text-green-400' :
+                      referral.status === 'paid' ? 'bg-blue-500/20 text-blue-400' :
+                      'bg-amber-500/20 text-amber-400'
+                    }`}>
+                      {referral.status}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-gray-400">
+                      {new Date(referral.created_at).toLocaleDateString()}
+                    </span>
+                    <span className="text-white font-medium">
                       ${referral.commission_amount?.toFixed(2) || '0.00'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </motion.div>
     </div>
