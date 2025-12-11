@@ -159,7 +159,7 @@ export function WebinarPage() {
     <PageLayout>
       <div className="min-h-screen bg-[#1a2744]">
         {/* Top Banner Image */}
-        <div className="pt-16 sm:pt-20 max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="pt-24 sm:pt-28 max-w-7xl mx-auto px-4 sm:px-6">
           <img
             src="/media/Gemini_Generated_Image_tfyv6dtfyv6dtfyv.jpg"
             alt="Webinar Banner - استراتيجيات كبار المستثمرين"
@@ -196,25 +196,30 @@ export function WebinarPage() {
                   استراتيجيات كبـــار المستثمرين والبنوك الاستثمارية
                 </h1>
 
-                {/* Info Bar - centered */}
-                <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
-                  <div className="flex items-center gap-2">
+                {/* Info Bar - 2 columns */}
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
+                  <div className="flex items-center justify-center gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
                     <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 text-[#f5a623]" />
                     <span className="text-white font-medium text-sm sm:text-base">مجاناً</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
                     <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-[#f5a623]" />
                     <span className="text-white text-sm sm:text-base">السبت 13 ديسمبر</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
                     <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-[#f5a623]" />
                     <span className="text-white text-sm sm:text-base">08:30 م بتوقيت الرياض</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
                     <Wifi className="w-5 h-5 sm:w-6 sm:h-6 text-[#f5a623]" />
                     <span className="text-white text-sm sm:text-base">عبر الإنترنت</span>
                   </div>
                 </div>
+
+                {/* Description */}
+                <p className="text-gray-300 mb-6 sm:mb-8 text-base sm:text-lg leading-relaxed">
+                  قم بتسجيل حضورك الآن في هذه الندوة المميّزة ولا تفوّت فرصة الاستفادة من أمهر الخبراء في التداول بالسوق الأمريكي
+                </p>
 
                 {/* Countdown Timer */}
                 <div className="flex justify-center gap-3 sm:gap-4 mb-6 sm:mb-8" dir="ltr">
@@ -236,11 +241,6 @@ export function WebinarPage() {
                   </div>
                 </div>
 
-                {/* Description */}
-                <p className="text-gray-300 mb-6 sm:mb-8 text-base sm:text-lg leading-relaxed">
-                  قم بتسجيل حضورك الآن في هذه الندوة المميّزة ولا تفوّت فرصة الاستفادة من أمهر الخبراء في التداول بالسوق الأمريكي
-                </p>
-
                 {/* Description Text - Hidden on mobile */}
                 <div className="hidden sm:block bg-white/5 backdrop-blur rounded-lg p-4 sm:p-6 mb-6 sm:mb-8 border border-white/10">
                   <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
@@ -260,20 +260,33 @@ export function WebinarPage() {
                   </div>
                 </div>
 
-                {/* Promo Banner - Hidden on mobile */}
+                {/* Promo Banner - Desktop only */}
                 <div className="hidden sm:flex mt-6 bg-white rounded-lg p-4 items-center justify-center gap-3">
                   <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white font-bold">
-                    %
+                    🎁
                   </div>
                   <div className="text-center">
-                    <p className="text-gray-800 font-medium">تداول مع QUANTROCK واحصل</p>
-                    <p className="text-[#f5a623] font-bold">على اشتراك متداول PRO مجاناً!</p>
+                    <p className="text-gray-800 font-bold">مفاجأت كبيرة!</p>
+                    <p className="text-gray-700 text-sm">بانتظاركم في نهاية الندوة</p>
+                    <p className="text-[#f5a623] font-bold">اختيار فائز بجائزة اشتراك بريميوم في كوانتروك</p>
                   </div>
                 </div>
               </div>
 
-              {/* Left Side - Registration Form (shows second on mobile) */}
-              <div className="order-2 lg:order-1">
+              {/* Promo Banner - Mobile only (above form) */}
+              <div className="sm:hidden order-2 flex bg-white rounded-lg p-3 items-center justify-center gap-3" dir="rtl">
+                <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                  🎁
+                </div>
+                <div className="text-center">
+                  <p className="text-gray-800 font-bold text-sm">مفاجأت كبيرة!</p>
+                  <p className="text-gray-700 text-xs">بانتظاركم في نهاية الندوة</p>
+                  <p className="text-[#f5a623] font-bold text-xs">اختيار فائز بجائزة اشتراك بريميوم في كوانتروك</p>
+                </div>
+              </div>
+
+              {/* Left Side - Registration Form (shows third on mobile) */}
+              <div className="order-3 lg:order-1">
                 <div className="bg-gradient-to-br from-[#f5a623] via-[#c77dff] to-[#7b2cbf] rounded-lg shadow-2xl overflow-hidden max-w-md mx-auto lg:mx-0 p-1">
                   <div className="bg-[#1a1f35] rounded-lg overflow-hidden">
                   {/* Form Header */}
@@ -414,7 +427,7 @@ export function WebinarPage() {
         </div>
 
         {/* Presenter Section */}
-        <div className="bg-[#1a2744] py-8 sm:py-12">
+        <div className="bg-gradient-to-r from-[#f5a623]/20 via-[#7b2cbf]/30 to-[#1a2744] py-8 sm:py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="text-right mb-6 sm:mb-8" dir="rtl">
               <h2 className="text-xl sm:text-2xl font-bold text-white inline-block border-r-4 border-[#f5a623] pr-4">
