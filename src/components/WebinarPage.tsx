@@ -19,6 +19,8 @@ export function WebinarPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
+    console.log('Supabase URL:', import.meta.env.VITE_SUPABASE_URL);
+    console.log('Has anon key:', !!import.meta.env.VITE_SUPABASE_ANON_KEY);
     setIsLoading(true);
     setError(null);
 
