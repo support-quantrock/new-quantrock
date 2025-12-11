@@ -8,7 +8,9 @@ import {
   AlertCircle,
   CheckCircle,
   Key,
-  Shield
+  Shield,
+  Copy,
+  Video
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -17,6 +19,21 @@ export function ProfilePage() {
   const [fullName, setFullName] = useState(profile?.full_name || '');
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const webinarReferralLink = profile?.referral_code
+    ? `${window.location.origin}/webinars?ref=${profile.referral_code}`
+    : '';
+
+  const copyWebinarLink = async () => {
+    try {
+      await navigator.clipboard.writeText(webinarReferralLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      console.error('Failed to copy:', error);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,12 +84,31 @@ export function ProfilePage() {
             </h2>
             <p className="text-gray-400 text-sm mb-4">{user?.email}</p>
 
-            {/* Referral Code */}
+            {/* Webinar Referral Link */}
             <div className="bg-black/20 rounded-xl p-4">
-              <p className="text-gray-400 text-xs mb-1">Your Referral Code</p>
-              <p className="text-purple-400 font-mono text-lg font-bold">
-                {profile?.referral_code || 'N/A'}
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Video className="w-4 h-4 text-[#f5a623]" />
+                <p className="text-gray-400 text-xs">Webinar Referral Link</p>
+              </div>
+              <p className="text-[#f5a623] text-xs break-all mb-2">
+                {webinarReferralLink || 'N/A'}
               </p>
+              <button
+                onClick={copyWebinarLink}
+                className="flex items-center justify-center gap-2 w-full px-3 py-2 bg-[#f5a623] hover:bg-[#e09515] text-white text-sm font-medium rounded-lg transition-colors"
+              >
+                {copied ? (
+                  <>
+                    <CheckCircle className="w-4 h-4" />
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4" />
+                    Copy Link
+                  </>
+                )}
+              </button>
             </div>
 
             {/* Member Since */}

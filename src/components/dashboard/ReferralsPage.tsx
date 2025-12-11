@@ -206,7 +206,6 @@ export function ReferralsPage() {
 
   const statCards = [
     { label: 'Total Referrals', value: stats.totalReferrals, icon: Users, color: 'purple' },
-    { label: 'Completed', value: stats.completedReferrals, icon: CheckCircle, color: 'green' },
     { label: 'Pending', value: stats.pendingReferrals, icon: UserPlus, color: 'amber' },
     { label: 'Link Clicks', value: stats.totalClicks, icon: MousePointer, color: 'blue' },
   ];

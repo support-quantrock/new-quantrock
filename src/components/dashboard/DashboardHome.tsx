@@ -22,6 +22,7 @@ import { supabase, Referral } from '../../lib/supabase';
 
 interface Stats {
   totalReferrals: number;
+  completedReferrals: number;
   totalEarnings: number;
   totalClicks: number;
   pendingEarnings: number;
@@ -31,6 +32,7 @@ export function DashboardHome() {
   const { user, profile } = useAuth();
   const [stats, setStats] = useState<Stats>({
     totalReferrals: 0,
+    completedReferrals: 0,
     totalEarnings: 0,
     totalClicks: 0,
     pendingEarnings: 0,
@@ -84,6 +86,8 @@ export function DashboardHome() {
       const pendingEarnings = earningsData
         ?.filter(r => r.status === 'pending')
         .reduce((sum, r) => sum + (r.commission_amount || 0), 0) || 0;
+      const completedReferrals = earningsData
+        ?.filter(r => r.status === 'completed' || r.status === 'paid').length || 0;
 
       // Fetch clicks count
       const { count: clickCount } = await supabase
@@ -93,6 +97,7 @@ export function DashboardHome() {
 
       setStats({
         totalReferrals: referralCount || 0,
+        completedReferrals,
         totalEarnings,
         totalClicks: clickCount || 0,
         pendingEarnings,
@@ -207,6 +212,13 @@ export function DashboardHome() {
       bgColor: 'bg-purple-500/10',
     },
     {
+      label: 'Completed',
+      value: stats.completedReferrals,
+      icon: CheckCircle,
+      color: 'from-green-500 to-green-600',
+      bgColor: 'bg-green-500/10',
+    },
+    {
       label: 'Total Earnings',
       value: `$${stats.totalEarnings.toFixed(2)}`,
       icon: DollarSign,
@@ -268,8 +280,8 @@ export function DashboardHome() {
         ))}
       </div>
 
-      {/* Referral Link Card */}
-      <motion.div
+      {/* Referral Link Card - Hidden */}
+      {/* <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
@@ -306,7 +318,7 @@ export function DashboardHome() {
             </button>
           </div>
         </div>
-      </motion.div>
+      </motion.div> */}
 
       {/* Webinar Referral Link Section */}
       <motion.div

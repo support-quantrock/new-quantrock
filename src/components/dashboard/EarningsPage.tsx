@@ -180,16 +180,17 @@ export function EarningsPage() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-4">
-          <div className="bg-black/20 rounded-xl p-4">
+        <div className="grid md:grid-cols-2 gap-4">
+          {/* Per Signup - Hidden */}
+          {/* <div className="bg-black/20 rounded-xl p-4">
             <p className="text-gray-400 text-sm mb-1">Per Signup</p>
             <p className="text-2xl font-bold text-green-400">$5.00</p>
             <p className="text-gray-500 text-xs mt-1">When user completes signup</p>
-          </div>
+          </div> */}
           <div className="bg-black/20 rounded-xl p-4">
             <p className="text-gray-400 text-sm mb-1">Per Active User</p>
-            <p className="text-2xl font-bold text-blue-400">$10.00</p>
-            <p className="text-gray-500 text-xs mt-1">When user becomes active</p>
+            <p className="text-2xl font-bold text-blue-400">$1.00</p>
+            <p className="text-gray-500 text-xs mt-1">Per subscription</p>
           </div>
           <div className="bg-black/20 rounded-xl p-4">
             <p className="text-gray-400 text-sm mb-1">Recurring</p>
