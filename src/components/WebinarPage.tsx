@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, Wifi, DollarSign, CheckCircle, Loader2 } from 'lucide-react';
 import { PageLayout } from './PageLayout';
 
 export function WebinarPage() {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [referralCode, setReferralCode] = useState<string | null>(null);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -14,6 +19,14 @@ export function WebinarPage() {
   const [error, setError] = useState<string | null>(null);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [agreeShare, setAgreeShare] = useState(false);
+
+  // Extract referral code from URL
+  useEffect(() => {
+    const ref = searchParams.get('ref');
+    if (ref) {
+      setReferralCode(ref.toUpperCase());
+    }
+  }, [searchParams]);
 
   // Countdown timer state
   const [timeLeft, setTimeLeft] = useState({
@@ -91,6 +104,41 @@ export function WebinarPage() {
       } else {
         console.log('Registration successful!');
         setIsSubmitted(true);
+
+        // Handle redirect based on referral code
+        if (referralCode) {
+          try {
+            // Fetch the referrer's custom_url by their referral code
+            const profileResponse = await fetch(
+              `${supabaseUrl}/rest/v1/profiles?referral_code=eq.${referralCode}&select=custom_url`,
+              {
+                headers: {
+                  'apikey': supabaseKey,
+                  'Authorization': `Bearer ${supabaseKey}`,
+                  'Content-Type': 'application/json',
+                },
+              }
+            );
+
+            if (profileResponse.ok) {
+              const profiles = await profileResponse.json();
+              if (profiles && profiles.length > 0 && profiles[0].custom_url) {
+                // Redirect to the referrer's custom URL after a short delay
+                setTimeout(() => {
+                  window.location.href = profiles[0].custom_url;
+                }, 2000);
+                return;
+              }
+            }
+          } catch (err) {
+            console.error('Error fetching referrer profile:', err);
+          }
+        }
+
+        // Default redirect to /app if no referral code or no custom_url
+        setTimeout(() => {
+          navigate('/app');
+        }, 2000);
       }
     } catch (err) {
       console.error('Registration error:', err);

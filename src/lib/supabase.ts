@@ -20,6 +20,7 @@ export interface Profile {
   referral_code: string;
   referrer_id: string | null;
   role: 'user' | 'admin';
+  custom_url: string | null;
   created_at: string;
   updated_at: string;
 }

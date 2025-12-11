@@ -132,5 +132,12 @@ CREATE TRIGGER profiles_updated_at
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at();
 
 -- =====================================================
+-- 7. ADD custom_url COLUMN TO PROFILES (for webinar redirect)
+-- =====================================================
+-- Run this if you already have the profiles table:
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS custom_url TEXT;
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'user' CHECK (role IN ('user', 'admin'));
+
+-- =====================================================
 -- DONE! Your schema is ready.
 -- =====================================================

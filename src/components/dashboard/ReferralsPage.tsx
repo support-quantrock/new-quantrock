@@ -9,7 +9,10 @@ import {
   Link as LinkIcon,
   Share2,
   QrCode,
-  Video
+  Video,
+  ExternalLink,
+  Save,
+  Loader2
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useAuth } from '../../contexts/AuthContext';
@@ -36,6 +39,9 @@ export function ReferralsPage() {
   const [showQR, setShowQR] = useState(false);
   const [showWebinarQR, setShowWebinarQR] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [redirectUrl, setRedirectUrl] = useState('');
+  const [savingRedirectUrl, setSavingRedirectUrl] = useState(false);
+  const [redirectUrlSaved, setRedirectUrlSaved] = useState(false);
 
   const referralLink = profile?.referral_code
     ? `${window.location.origin}/signup?ref=${profile.referral_code}`
@@ -50,6 +56,13 @@ export function ReferralsPage() {
       fetchData();
     }
   }, [user]);
+
+  // Load redirect URL from profile
+  useEffect(() => {
+    if (profile?.custom_url) {
+      setRedirectUrl(profile.custom_url);
+    }
+  }, [profile]);
 
   const fetchData = async () => {
     try {
@@ -148,6 +161,46 @@ export function ReferralsPage() {
       }
     } else {
       copyWebinarLink();
+    }
+  };
+
+  const saveRedirectUrl = async () => {
+    if (!user) return;
+
+    setSavingRedirectUrl(true);
+    setRedirectUrlSaved(false);
+
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+      const response = await fetch(
+        `${supabaseUrl}/rest/v1/profiles?id=eq.${user.id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'apikey': supabaseKey,
+            'Authorization': `Bearer ${supabaseKey}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal',
+          },
+          body: JSON.stringify({
+            custom_url: redirectUrl.trim() || null,
+            updated_at: new Date().toISOString()
+          }),
+        }
+      );
+
+      if (response.ok) {
+        setRedirectUrlSaved(true);
+        setTimeout(() => setRedirectUrlSaved(false), 2000);
+      } else {
+        console.error('Failed to save redirect URL');
+      }
+    } catch (error) {
+      console.error('Error saving redirect URL:', error);
+    } finally {
+      setSavingRedirectUrl(false);
     }
   };
 
@@ -259,15 +312,9 @@ export function ReferralsPage() {
             <div className="bg-white p-4 rounded-xl">
               <QRCodeSVG
                 value={referralLink}
-                size={160}
+                size={180}
                 level="H"
                 includeMargin={true}
-                imageSettings={{
-                  src: "/media/logo_png-2.png",
-                  height: 35,
-                  width: 35,
-                  excavate: true,
-                }}
               />
             </div>
           </div>
@@ -332,18 +379,58 @@ export function ReferralsPage() {
             <div className="bg-white p-4 rounded-xl">
               <QRCodeSVG
                 value={webinarReferralLink}
-                size={160}
+                size={180}
                 level="H"
                 includeMargin={true}
-                imageSettings={{
-                  src: "/media/logo_png-2.png",
-                  height: 35,
-                  width: 35,
-                  excavate: true,
-                }}
               />
             </div>
           </div>
+        </div>
+      </motion.div>
+
+      {/* Webinar Redirect URL Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.48 }}
+        className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 backdrop-blur-sm rounded-2xl p-6 border border-[#f5a623]/30"
+      >
+        <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <ExternalLink className="w-5 h-5 text-[#f5a623]" />
+          Webinar Redirect URL
+        </h2>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm text-gray-400 mb-2">
+              Where should users be redirected after registering via your webinar link?
+            </label>
+            <div className="flex items-center gap-2">
+              <input
+                type="url"
+                value={redirectUrl}
+                onChange={(e) => setRedirectUrl(e.target.value)}
+                placeholder="https://your-website.com/thank-you"
+                className="flex-1 px-4 py-3 bg-black/40 rounded-xl border border-purple-500/30 text-white placeholder-gray-500 focus:outline-none focus:border-[#f5a623]"
+              />
+              <button
+                onClick={saveRedirectUrl}
+                disabled={savingRedirectUrl}
+                className="px-4 py-3 bg-[#f5a623] hover:bg-[#e09515] disabled:bg-gray-600 text-white rounded-xl transition-colors flex items-center gap-2"
+              >
+                {savingRedirectUrl ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : redirectUrlSaved ? (
+                  <CheckCircle className="w-5 h-5" />
+                ) : (
+                  <Save className="w-5 h-5" />
+                )}
+              </button>
+            </div>
+          </div>
+          <p className="text-gray-500 text-sm">
+            When someone registers for the webinar using your referral link, they will be redirected to this URL after successful registration. Leave empty to redirect to the app download page.
+          </p>
         </div>
       </motion.div>
 
@@ -351,7 +438,7 @@ export function ReferralsPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
+        transition={{ duration: 0.5, delay: 0.55 }}
         className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20"
       >
         <h2 className="text-lg font-bold text-white mb-4">Referral History</h2>
