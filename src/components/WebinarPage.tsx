@@ -18,15 +18,11 @@ export function WebinarPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    console.log('Supabase URL:', import.meta.env.VITE_SUPABASE_URL);
-    console.log('Has anon key:', !!import.meta.env.VITE_SUPABASE_ANON_KEY);
     setIsLoading(true);
     setError(null);
 
     try {
-      console.log('Inserting into webinar_registrations...');
-      const { data, error: insertError } = await supabase
+      const { error: insertError } = await supabase
         .from('webinar_registrations')
         .insert({
           name: formData.name,
@@ -34,16 +30,11 @@ export function WebinarPage() {
           mobile: formData.mobile,
           country: formData.country,
           webinar_id: 'dec-2025'
-        })
-        .select();
-
-      console.log('Insert result:', { data, error: insertError });
+        });
 
       if (insertError) {
-        console.error('Registration error:', insertError);
         setError(`حدث خطأ أثناء التسجيل: ${insertError.message}`);
       } else {
-        console.log('Registration successful!');
         setIsSubmitted(true);
       }
     } catch (err) {
