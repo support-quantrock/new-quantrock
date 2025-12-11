@@ -439,22 +439,21 @@ export function WebinarPage() {
               {/* Presenter Image */}
               <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-[#f5a623] to-[#e09515] p-1 flex-shrink-0">
                 <div className="w-full h-full rounded-full overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face"
-                    alt="QUANTROCK Team"
-                    className="w-full h-full object-cover"
-                  />
+                  <div className="w-full h-full bg-gradient-to-br from-[#1a2744] to-[#2a3754] flex items-center justify-center">
+                    <svg className="w-12 h-12 sm:w-16 sm:h-16 text-[#f5a623]" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                  </div>
                 </div>
               </div>
 
               {/* Presenter Info */}
-              <div className="flex-1 text-right text-center md:text-right">
+              <div className="flex-1 text-right">
                 <p className="text-[#f5a623] text-xs sm:text-sm mb-1">المحاضر</p>
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-2">فريق QUANTROCK</h3>
-                <div className="w-16 h-1 bg-[#f5a623] mb-3 mx-auto md:mx-0 md:mr-0"></div>
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-2">أ. أحمد زغلول</h3>
+                <div className="w-16 h-1 bg-[#f5a623] mb-3 mr-0"></div>
                 <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
-                  محللون محترفون للأسواق المالية وخبراء في تداول الأسواق المالية منذ 10 سنوات.
-                  قدموا العديد من استراتيجيات التداول الناجحة بالإضافة إلى التحليلات الدورية للأسواق المالية.
+                  محاضر ومصمّم برامج تدريبية في الأسهم الأمريكية والفوركس مع خبرة عملية داخل غرف التداول
                 </p>
               </div>
 
