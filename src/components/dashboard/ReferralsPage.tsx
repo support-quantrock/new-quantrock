@@ -8,7 +8,8 @@ import {
   UserPlus,
   Link as LinkIcon,
   Share2,
-  QrCode
+  QrCode,
+  Video
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useAuth } from '../../contexts/AuthContext';
@@ -31,11 +32,17 @@ export function ReferralsPage() {
   });
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [copied, setCopied] = useState(false);
+  const [copiedWebinar, setCopiedWebinar] = useState(false);
   const [showQR, setShowQR] = useState(false);
+  const [showWebinarQR, setShowWebinarQR] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const referralLink = profile?.referral_code
     ? `${window.location.origin}/signup?ref=${profile.referral_code}`
+    : '';
+
+  const webinarReferralLink = profile?.referral_code
+    ? `${window.location.origin}/webinars?ref=${profile.referral_code}`
     : '';
 
   useEffect(() => {
@@ -115,6 +122,32 @@ export function ReferralsPage() {
       }
     } else {
       copyReferralLink();
+    }
+  };
+
+  const copyWebinarLink = async () => {
+    try {
+      await navigator.clipboard.writeText(webinarReferralLink);
+      setCopiedWebinar(true);
+      setTimeout(() => setCopiedWebinar(false), 2000);
+    } catch (error) {
+      console.error('Failed to copy:', error);
+    }
+  };
+
+  const shareWebinarLink = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Join our Free Webinar',
+          text: 'Join our free webinar on investment strategies!',
+          url: webinarReferralLink,
+        });
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      copyWebinarLink();
     }
   };
 
@@ -226,6 +259,79 @@ export function ReferralsPage() {
             <div className="bg-white p-4 rounded-xl">
               <QRCodeSVG
                 value={referralLink}
+                size={160}
+                level="H"
+                includeMargin={true}
+                imageSettings={{
+                  src: "/media/logo_png-2.png",
+                  height: 35,
+                  width: 35,
+                  excavate: true,
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Webinar Referral Link Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.45 }}
+        className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20"
+      >
+        <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <Video className="w-5 h-5 text-[#f5a623]" />
+          Webinar Referral Link
+        </h2>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Webinar Link */}
+          <div className="space-y-4">
+            {/* Webinar Referral Link */}
+            <div>
+              <label className="block text-sm text-gray-400 mb-2">Webinar Registration Link</label>
+              <div className="flex items-center gap-2">
+                <div className="flex-1 px-4 py-3 bg-black/40 rounded-xl border border-purple-500/30 text-gray-300 text-sm truncate">
+                  {webinarReferralLink}
+                </div>
+                <button
+                  onClick={copyWebinarLink}
+                  className="px-4 py-3 bg-[#f5a623] hover:bg-[#e09515] text-white rounded-xl transition-colors"
+                >
+                  {copiedWebinar ? <CheckCircle className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <button
+                onClick={shareWebinarLink}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[#f5a623] to-purple-600 hover:from-[#e09515] hover:to-purple-700 text-white font-medium rounded-xl transition-all"
+              >
+                <Share2 className="w-5 h-5" />
+                Share Webinar Link
+              </button>
+              <button
+                onClick={() => setShowWebinarQR(!showWebinarQR)}
+                className="px-4 py-3 bg-black/40 border border-purple-500/30 hover:bg-purple-500/10 text-white rounded-xl transition-colors"
+              >
+                <QrCode className="w-5 h-5" />
+              </button>
+            </div>
+
+            <p className="text-gray-500 text-sm">
+              Share this link to invite people to register for the upcoming webinar with your referral code.
+            </p>
+          </div>
+
+          {/* Webinar QR Code */}
+          <div className={`flex items-center justify-center ${showWebinarQR ? '' : 'hidden md:flex'}`}>
+            <div className="bg-white p-4 rounded-xl">
+              <QRCodeSVG
+                value={webinarReferralLink}
                 size={160}
                 level="H"
                 includeMargin={true}

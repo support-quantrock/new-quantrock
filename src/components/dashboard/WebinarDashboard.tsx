@@ -1,34 +1,42 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
-import { Users, Mail, Phone, Calendar, Download, Search, RefreshCw, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Users, Mail, Phone, Calendar, Download, Search, RefreshCw, MapPin } from 'lucide-react';
 
 interface WebinarRegistration {
   id: string;
   name: string;
   email: string;
   mobile: string;
+  country: string;
   webinar_id: string;
-  registered_at: string;
-  status: 'registered' | 'attended' | 'no_show' | 'cancelled';
+  created_at: string;
 }
 
 export function WebinarDashboard() {
   const [registrations, setRegistrations] = useState<WebinarRegistration[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
 
   const fetchRegistrations = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('webinar_registrations')
-        .select('*')
-        .order('registered_at', { ascending: false });
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-      if (error) {
-        console.error('Error fetching registrations:', error);
+      const response = await fetch(
+        `${supabaseUrl}/rest/v1/webinar_registrations?select=*&order=created_at.desc`,
+        {
+          headers: {
+            'apikey': supabaseKey,
+            'Authorization': `Bearer ${supabaseKey}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        console.error('Error fetching registrations:', response.statusText);
       } else {
+        const data = await response.json();
         setRegistrations(data || []);
       }
     } catch (err) {
@@ -42,29 +50,8 @@ export function WebinarDashboard() {
     fetchRegistrations();
   }, []);
 
-  const updateStatus = async (id: string, newStatus: string) => {
-    try {
-      const { error } = await supabase
-        .from('webinar_registrations')
-        .update({ status: newStatus })
-        .eq('id', id);
-
-      if (error) {
-        console.error('Error updating status:', error);
-      } else {
-        setRegistrations(prev =>
-          prev.map(reg =>
-            reg.id === id ? { ...reg, status: newStatus as WebinarRegistration['status'] } : reg
-          )
-        );
-      }
-    } catch (err) {
-      console.error('Error:', err);
-    }
-  };
-
   const exportToCSV = () => {
-    const headers = ['Name', 'Email', 'Mobile', 'Webinar ID', 'Registered At', 'Status'];
+    const headers = ['Name', 'Email', 'Mobile', 'Country', 'Webinar ID', 'Registered At'];
     const csvContent = [
       headers.join(','),
       ...filteredRegistrations.map(reg =>
@@ -72,9 +59,9 @@ export function WebinarDashboard() {
           `"${reg.name}"`,
           reg.email,
           reg.mobile,
+          `"${reg.country}"`,
           reg.webinar_id,
-          new Date(reg.registered_at).toLocaleString(),
-          reg.status
+          new Date(reg.created_at).toLocaleString()
         ].join(',')
       )
     ].join('\n');
@@ -91,48 +78,8 @@ export function WebinarDashboard() {
       reg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       reg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       reg.mobile.includes(searchTerm);
-    const matchesStatus = statusFilter === 'all' || reg.status === statusFilter;
-    return matchesSearch && matchesStatus;
+    return matchesSearch;
   });
-
-  const stats = {
-    total: registrations.length,
-    registered: registrations.filter(r => r.status === 'registered').length,
-    attended: registrations.filter(r => r.status === 'attended').length,
-    noShow: registrations.filter(r => r.status === 'no_show').length,
-    cancelled: registrations.filter(r => r.status === 'cancelled').length,
-  };
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'registered':
-        return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
-            <Clock className="w-3 h-3" /> مسجل
-          </span>
-        );
-      case 'attended':
-        return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-            <CheckCircle className="w-3 h-3" /> حضر
-          </span>
-        );
-      case 'no_show':
-        return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
-            <XCircle className="w-3 h-3" /> لم يحضر
-          </span>
-        );
-      case 'cancelled':
-        return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-            <XCircle className="w-3 h-3" /> ملغي
-          </span>
-        );
-      default:
-        return null;
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -160,88 +107,29 @@ export function WebinarDashboard() {
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 rounded-xl p-4 border border-purple-500/20">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
-              <Users className="w-5 h-5 text-purple-400" />
-            </div>
-            <div>
-              <p className="text-gray-400 text-xs">Total</p>
-              <p className="text-white text-xl font-bold">{stats.total}</p>
-            </div>
+      {/* Stats Card */}
+      <div className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 rounded-xl p-6 border border-purple-500/20">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-xl bg-purple-500/20 flex items-center justify-center">
+            <Users className="w-7 h-7 text-purple-400" />
           </div>
-        </div>
-        <div className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 rounded-xl p-4 border border-blue-500/20">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
-              <Clock className="w-5 h-5 text-blue-400" />
-            </div>
-            <div>
-              <p className="text-gray-400 text-xs">Registered</p>
-              <p className="text-white text-xl font-bold">{stats.registered}</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 rounded-xl p-4 border border-green-500/20">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
-              <CheckCircle className="w-5 h-5 text-green-400" />
-            </div>
-            <div>
-              <p className="text-gray-400 text-xs">Attended</p>
-              <p className="text-white text-xl font-bold">{stats.attended}</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 rounded-xl p-4 border border-red-500/20">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
-              <XCircle className="w-5 h-5 text-red-400" />
-            </div>
-            <div>
-              <p className="text-gray-400 text-xs">No Show</p>
-              <p className="text-white text-xl font-bold">{stats.noShow}</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 rounded-xl p-4 border border-gray-500/20">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gray-500/20 flex items-center justify-center">
-              <XCircle className="w-5 h-5 text-gray-400" />
-            </div>
-            <div>
-              <p className="text-gray-400 text-xs">Cancelled</p>
-              <p className="text-white text-xl font-bold">{stats.cancelled}</p>
-            </div>
+          <div>
+            <p className="text-gray-400 text-sm">Total Registrations</p>
+            <p className="text-white text-3xl font-bold">{registrations.length}</p>
           </div>
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search by name, email, or phone..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-black/40 border border-purple-500/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
-          />
-        </div>
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-4 py-2.5 bg-black/40 border border-purple-500/30 rounded-lg text-white focus:outline-none focus:border-purple-500"
-        >
-          <option value="all">All Status</option>
-          <option value="registered">Registered</option>
-          <option value="attended">Attended</option>
-          <option value="no_show">No Show</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
+      {/* Search */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <input
+          type="text"
+          placeholder="Search by name, email, or phone..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full pl-10 pr-4 py-2.5 bg-black/40 border border-purple-500/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
+        />
       </div>
 
       {/* Table */}
@@ -263,9 +151,8 @@ export function WebinarDashboard() {
                   <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Name</th>
                   <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Email</th>
                   <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Mobile</th>
+                  <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Country</th>
                   <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Registered</th>
-                  <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Status</th>
-                  <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -294,9 +181,15 @@ export function WebinarDashboard() {
                       </a>
                     </td>
                     <td className="px-6 py-4">
+                      <div className="flex items-center gap-2 text-gray-300 text-sm">
+                        <MapPin className="w-4 h-4" />
+                        {reg.country}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
                       <div className="flex items-center gap-2 text-gray-400 text-sm">
                         <Calendar className="w-4 h-4" />
-                        {new Date(reg.registered_at).toLocaleDateString('en-US', {
+                        {new Date(reg.created_at).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',
                           year: 'numeric',
@@ -304,21 +197,6 @@ export function WebinarDashboard() {
                           minute: '2-digit'
                         })}
                       </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      {getStatusBadge(reg.status)}
-                    </td>
-                    <td className="px-6 py-4">
-                      <select
-                        value={reg.status}
-                        onChange={(e) => updateStatus(reg.id, e.target.value)}
-                        className="px-3 py-1.5 bg-black/40 border border-purple-500/30 rounded-lg text-white text-sm focus:outline-none focus:border-purple-500"
-                      >
-                        <option value="registered">Registered</option>
-                        <option value="attended">Attended</option>
-                        <option value="no_show">No Show</option>
-                        <option value="cancelled">Cancelled</option>
-                      </select>
                     </td>
                   </tr>
                 ))}

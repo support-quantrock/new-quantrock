@@ -7,7 +7,8 @@ import {
   LogOut,
   X,
   ChevronRight,
-  Video
+  Video,
+  Shield
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -21,6 +22,7 @@ const menuItems = [
   { path: '/dashboard/referrals', icon: Users, label: 'Referrals', adminOnly: false },
   { path: '/dashboard/earnings', icon: DollarSign, label: 'Earnings', adminOnly: false },
   { path: '/dashboard/webinars', icon: Video, label: 'Webinars', adminOnly: true },
+  { path: '/dashboard/users', icon: Shield, label: 'Users Management', adminOnly: true },
   { path: '/dashboard/profile', icon: User, label: 'Profile', adminOnly: false },
 ];
 

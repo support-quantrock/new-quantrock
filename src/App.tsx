@@ -26,6 +26,7 @@ import { ReferralsPage } from './components/dashboard/ReferralsPage';
 import { EarningsPage } from './components/dashboard/EarningsPage';
 import { ProfilePage } from './components/dashboard/ProfilePage';
 import { WebinarDashboard } from './components/dashboard/WebinarDashboard';
+import { UsersManagement } from './components/dashboard/UsersManagement';
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
               <Route path="earnings" element={<EarningsPage />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="webinars" element={<AdminRoute><WebinarDashboard /></AdminRoute>} />
+              <Route path="users" element={<AdminRoute><UsersManagement /></AdminRoute>} />
             </Route>
           </Routes>
         </BrowserRouter>
