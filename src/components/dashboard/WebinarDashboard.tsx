@@ -18,28 +18,71 @@ const webinarDates: Record<string, { name: string; date: string; displayDate: st
   'dec-2025': { name: 'ندوة ديسمبر 2025', date: '2025-12-13', displayDate: '13 ديسمبر 2025' },
 };
 
-// Generate calendar dates for the date picker
-const generateCalendarDates = () => {
-  const dates: { date: Date; hasWebinar: boolean; webinarId: string | null; registrationCount?: number }[] = [];
-  const today = new Date();
+// Generate webinar dates for the calendar - only dates with webinars plus some nearby dates
+const generateWebinarCalendarDates = () => {
+  const dates: { date: Date; hasWebinar: boolean; webinarId: string | null }[] = [];
 
-  // Generate dates from 30 days ago to 60 days ahead
-  for (let i = -30; i <= 60; i++) {
-    const date = new Date(today);
-    date.setDate(today.getDate() + i);
+  // Get all webinar dates
+  const webinarDatesList = Object.entries(webinarDates).map(([id, info]) => ({
+    id,
+    date: new Date(info.date)
+  }));
 
-    // Check if this date has a webinar
-    const dateStr = date.toISOString().split('T')[0];
-    const webinarEntry = Object.entries(webinarDates).find(([_, info]) => info.date === dateStr);
+  // Sort by date
+  webinarDatesList.sort((a, b) => a.date.getTime() - b.date.getTime());
 
+  // For each webinar, add dates around it (skip weekends for non-webinar dates)
+  webinarDatesList.forEach(webinar => {
+    // Add 3 days before
+    for (let i = 5; i >= 1; i--) {
+      const date = new Date(webinar.date);
+      date.setDate(date.getDate() - i);
+      // Skip if weekend and not a webinar
+      const dayOfWeek = date.getDay();
+      if (dayOfWeek === 0 || dayOfWeek === 6) continue;
+
+      const dateStr = date.toISOString().split('T')[0];
+      const existingWebinar = Object.entries(webinarDates).find(([_, info]) => info.date === dateStr);
+
+      dates.push({
+        date,
+        hasWebinar: !!existingWebinar,
+        webinarId: existingWebinar ? existingWebinar[0] : null
+      });
+    }
+
+    // Add the webinar date itself
     dates.push({
-      date,
-      hasWebinar: !!webinarEntry,
-      webinarId: webinarEntry ? webinarEntry[0] : null
+      date: webinar.date,
+      hasWebinar: true,
+      webinarId: webinar.id
     });
-  }
 
-  return dates;
+    // Add 3 days after
+    for (let i = 1; i <= 5; i++) {
+      const date = new Date(webinar.date);
+      date.setDate(date.getDate() + i);
+      // Skip if weekend and not a webinar
+      const dayOfWeek = date.getDay();
+      if (dayOfWeek === 0 || dayOfWeek === 6) continue;
+
+      const dateStr = date.toISOString().split('T')[0];
+      const existingWebinar = Object.entries(webinarDates).find(([_, info]) => info.date === dateStr);
+
+      dates.push({
+        date,
+        hasWebinar: !!existingWebinar,
+        webinarId: existingWebinar ? existingWebinar[0] : null
+      });
+    }
+  });
+
+  // Remove duplicates and sort
+  const uniqueDates = dates.filter((date, index, self) =>
+    index === self.findIndex(d => d.date.toISOString().split('T')[0] === date.date.toISOString().split('T')[0])
+  ).sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  return uniqueDates;
 };
 
 export function WebinarDashboard() {
@@ -47,7 +90,7 @@ export function WebinarDashboard() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [calendarDates, setCalendarDates] = useState(generateCalendarDates());
+  const [calendarDates, setCalendarDates] = useState(generateWebinarCalendarDates());
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Find and select the first webinar date on mount
@@ -109,16 +152,6 @@ export function WebinarDashboard() {
         }
 
         setRegistrations(data || []);
-
-        // Update calendar dates with registration counts
-        const updatedDates = calendarDates.map(d => {
-          if (d.webinarId) {
-            const count = data.filter((r: WebinarRegistration) => r.webinar_id === d.webinarId).length;
-            return { ...d, registrationCount: count };
-          }
-          return d;
-        });
-        setCalendarDates(updatedDates);
       }
     } catch (err) {
       console.error('Error:', err);
@@ -134,7 +167,7 @@ export function WebinarDashboard() {
   // Scroll calendar left/right
   const scrollCalendar = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
-      const scrollAmount = 400;
+      const scrollAmount = 300;
       scrollContainerRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
@@ -238,27 +271,26 @@ export function WebinarDashboard() {
         </div>
       </div>
 
-      {/* Calendar Date Picker */}
-      <div className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 rounded-xl p-4 border border-purple-500/20">
-        <div className="flex items-center gap-2">
+      {/* Calendar Date Picker - Matching Reference Design */}
+      <div className="bg-white/5 rounded-2xl p-4 sm:p-6">
+        <div className="flex items-center gap-3">
           {/* Left Arrow */}
           <button
             onClick={() => scrollCalendar('left')}
-            className="flex-shrink-0 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-200/10 hover:bg-gray-200/20 flex items-center justify-center text-gray-400 hover:text-white transition-colors shadow-lg"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
 
           {/* Scrollable Calendar */}
           <div
             ref={scrollContainerRef}
-            className="flex-1 overflow-x-auto scrollbar-hide flex gap-3 py-2 px-1"
+            className="flex-1 overflow-x-auto scrollbar-hide flex gap-2 sm:gap-4 py-2"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {calendarDates.map((dateInfo, index) => {
               const dateStr = dateInfo.date.toISOString().split('T')[0];
               const isSelected = selectedDate === dateStr;
-              const isToday = dateStr === new Date().toISOString().split('T')[0];
 
               return (
                 <button
@@ -266,30 +298,29 @@ export function WebinarDashboard() {
                   data-date={dateStr}
                   onClick={() => dateInfo.hasWebinar && setSelectedDate(dateStr)}
                   disabled={!dateInfo.hasWebinar}
-                  className={`flex-shrink-0 w-20 sm:w-24 rounded-xl p-3 sm:p-4 text-center transition-all duration-300 ${
+                  className={`flex-shrink-0 w-[70px] sm:w-[90px] rounded-2xl p-3 sm:p-4 text-center transition-all duration-300 shadow-md ${
                     isSelected
-                      ? 'bg-[#22c55e] text-white shadow-lg shadow-green-500/30 scale-105'
+                      ? 'bg-[#22c55e] text-white shadow-xl shadow-green-500/40 scale-105'
                       : dateInfo.hasWebinar
-                        ? 'bg-white/10 hover:bg-white/20 text-white cursor-pointer'
-                        : 'bg-black/20 text-gray-500 cursor-not-allowed opacity-50'
-                  } ${isToday && !isSelected ? 'ring-2 ring-purple-500/50' : ''}`}
+                        ? 'bg-white/90 hover:bg-white text-gray-700 cursor-pointer hover:shadow-lg hover:scale-102'
+                        : 'bg-gray-300/30 text-gray-500 cursor-not-allowed'
+                  }`}
                 >
-                  <div className={`text-[10px] sm:text-xs font-medium mb-1 ${isSelected ? 'text-white' : 'text-gray-400'}`}>
+                  <div className={`text-[10px] sm:text-xs font-semibold mb-1 uppercase tracking-wide ${
+                    isSelected ? 'text-white/90' : dateInfo.hasWebinar ? 'text-gray-500' : 'text-gray-400'
+                  }`}>
                     {getDayName(dateInfo.date)}
                   </div>
-                  <div className="text-2xl sm:text-3xl font-bold mb-1">
+                  <div className={`text-2xl sm:text-4xl font-bold mb-1 ${
+                    isSelected ? 'text-white' : dateInfo.hasWebinar ? 'text-gray-800' : 'text-gray-400'
+                  }`}>
                     {dateInfo.date.getDate()}
                   </div>
-                  <div className={`text-[10px] sm:text-xs font-medium ${isSelected ? 'text-white' : 'text-gray-400'}`}>
+                  <div className={`text-[10px] sm:text-xs font-semibold uppercase tracking-wide ${
+                    isSelected ? 'text-white/90' : dateInfo.hasWebinar ? 'text-gray-500' : 'text-gray-400'
+                  }`}>
                     {getMonthName(dateInfo.date)}
                   </div>
-                  {dateInfo.hasWebinar && dateInfo.registrationCount !== undefined && (
-                    <div className={`mt-1 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full ${
-                      isSelected ? 'bg-white/20' : 'bg-purple-500/30 text-purple-300'
-                    }`}>
-                      {dateInfo.registrationCount} reg
-                    </div>
-                  )}
                 </button>
               );
             })}
@@ -298,9 +329,9 @@ export function WebinarDashboard() {
           {/* Right Arrow */}
           <button
             onClick={() => scrollCalendar('right')}
-            className="flex-shrink-0 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-200/10 hover:bg-gray-200/20 flex items-center justify-center text-gray-400 hover:text-white transition-colors shadow-lg"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
       </div>
