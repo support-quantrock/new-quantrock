@@ -347,8 +347,8 @@ export function WebinarPage() {
               {/* Left Side - Registration Form (shows third on mobile) */}
               <div className="order-3 lg:order-1 w-full">
                 {/* Countdown Timer - Desktop only (above form) */}
-                <div className="hidden lg:flex flex-col items-center pt-6 mb-6">
-                  <div className="flex justify-center gap-4" dir="ltr">
+                <div className="hidden lg:flex flex-col items-start pt-6 mb-6">
+                  <div className="flex justify-start gap-4" dir="ltr">
                     <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-4 min-w-[80px] text-center border border-purple-500/30 shadow-lg">
                       <div className="text-4xl font-bold text-white">{String(timeLeft.days).padStart(2, '0')}</div>
                       <div className="text-xs text-gray-400 mt-1">أيام</div>
@@ -368,7 +368,7 @@ export function WebinarPage() {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-[#f5a623] via-[#c77dff] to-[#7b2cbf] rounded-lg shadow-2xl overflow-hidden max-w-md mx-auto p-[2px] sm:p-1">
+                <div className="bg-gradient-to-br from-[#f5a623] via-[#c77dff] to-[#7b2cbf] rounded-lg shadow-2xl overflow-hidden max-w-md lg:ml-0 lg:mr-auto mx-auto p-[2px] sm:p-1">
                   <div className="bg-[#1a1f35] rounded-lg overflow-hidden">
                   {/* Form Header */}
                   <div className="bg-gradient-to-r from-[#f5a623]/20 to-[#7b2cbf]/20 p-4 sm:p-6 pb-2 text-center border-b border-purple-500/30">
