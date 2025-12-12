@@ -213,8 +213,9 @@ export function WebinarPage() {
                 </div>
 
                 {/* Main Title */}
-                <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 leading-tight">
-                  استراتيجيات كبـــار المستثمرين والبنوك الاستثمارية
+                <h1 className="text-xl sm:text-3xl md:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4 leading-tight lg:leading-relaxed">
+                  <span className="block">استراتيجيات كبـــار المستثمرين</span>
+                  <span className="block lg:mt-2">والبنوك الاستثمارية</span>
                 </h1>
 
                 {/* Description Text */}
@@ -346,9 +347,9 @@ export function WebinarPage() {
 
               {/* Left Side - Registration Form (shows third on mobile) */}
               <div className="order-3 lg:order-1 w-full">
-                {/* Countdown Timer - Desktop only (above form) */}
-                <div className="hidden lg:flex flex-col items-start pt-6 mb-6">
-                  <div className="flex justify-start gap-4" dir="ltr">
+                {/* Countdown Timer - Desktop only (above form, centered within form width) */}
+                <div className="hidden lg:flex flex-col items-center pt-6 mb-6 max-w-md">
+                  <div className="flex justify-center gap-4" dir="ltr">
                     <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-4 min-w-[80px] text-center border border-purple-500/30 shadow-lg">
                       <div className="text-4xl font-bold text-white">{String(timeLeft.days).padStart(2, '0')}</div>
                       <div className="text-xs text-gray-400 mt-1">أيام</div>
