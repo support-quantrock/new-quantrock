@@ -185,9 +185,9 @@ export function WebinarPage() {
 
   return (
     <PageLayout>
-      <div className="min-h-screen bg-[#1a1040] overflow-x-hidden w-full">
+      <div className="min-h-screen bg-[#1a1040] overflow-hidden w-full">
         {/* Top Banner Image */}
-        <div className="pt-24 sm:pt-28 max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="pt-24 sm:pt-28 max-w-7xl mx-auto px-3 sm:px-6">
           <img
             src="/media/Gemini_Generated_Image_tfyv6dtfyv6dtfyv.jpg"
             alt="Webinar Banner - استراتيجيات كبار المستثمرين"
@@ -200,11 +200,11 @@ export function WebinarPage() {
           className="relative pb-8 sm:pb-16 bg-[#1a1040]"
         >
 
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+          <div className="relative max-w-7xl mx-auto px-3 sm:px-6">
+            <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 items-start">
 
               {/* Right Side - Content (shows first on mobile) */}
-              <div className="order-1 lg:order-2 text-right" dir="rtl">
+              <div className="order-1 lg:order-2 text-right overflow-hidden" dir="rtl">
                 {/* Badge */}
                 <div className="inline-block mb-3 sm:mb-4 pt-4 sm:pt-6">
                   <span className="text-[#f5a623] text-base sm:text-lg font-medium">
@@ -213,9 +213,8 @@ export function WebinarPage() {
                 </div>
 
                 {/* Main Title */}
-                <h1 className="text-xl sm:text-3xl md:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4 leading-tight lg:leading-relaxed">
-                  <span className="block">استراتيجيات كبـــار المستثمرين</span>
-                  <span className="block lg:mt-2">والبنوك الاستثمارية</span>
+                <h1 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4 leading-relaxed">
+                  استراتيجيات كبـــار المستثمرين والبنوك الاستثمارية
                 </h1>
 
                 {/* Description Text */}
@@ -232,43 +231,43 @@ export function WebinarPage() {
                 </div>
 
                 {/* Info Bar - 2 columns */}
-                <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-4 sm:mb-6">
-                  <div className="flex items-center justify-center gap-1.5 sm:gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
-                    <DollarSign className="w-4 h-4 sm:w-6 sm:h-6 text-[#f5a623] flex-shrink-0" />
-                    <span className="text-white font-medium text-xs sm:text-base">مجاناً</span>
+                <div className="grid grid-cols-2 gap-1.5 sm:gap-4 mb-4 sm:mb-6">
+                  <div className="flex items-center justify-center gap-1 sm:gap-2 bg-white/5 rounded-lg p-1.5 sm:p-3">
+                    <DollarSign className="w-3.5 h-3.5 sm:w-6 sm:h-6 text-[#f5a623] flex-shrink-0" />
+                    <span className="text-white font-medium text-[10px] sm:text-base">مجاناً</span>
                   </div>
-                  <div className="flex items-center justify-center gap-1.5 sm:gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
-                    <Calendar className="w-4 h-4 sm:w-6 sm:h-6 text-[#f5a623] flex-shrink-0" />
-                    <span className="text-white text-xs sm:text-base">السبت 13 ديسمبر</span>
+                  <div className="flex items-center justify-center gap-1 sm:gap-2 bg-white/5 rounded-lg p-1.5 sm:p-3">
+                    <Calendar className="w-3.5 h-3.5 sm:w-6 sm:h-6 text-[#f5a623] flex-shrink-0" />
+                    <span className="text-white text-[10px] sm:text-base">السبت 13 ديسمبر</span>
                   </div>
-                  <div className="flex items-center justify-center gap-1.5 sm:gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
-                    <Clock className="w-4 h-4 sm:w-6 sm:h-6 text-[#f5a623] flex-shrink-0" />
-                    <span className="text-white text-xs sm:text-base">08:30 م الرياض</span>
+                  <div className="flex items-center justify-center gap-1 sm:gap-2 bg-white/5 rounded-lg p-1.5 sm:p-3">
+                    <Clock className="w-3.5 h-3.5 sm:w-6 sm:h-6 text-[#f5a623] flex-shrink-0" />
+                    <span className="text-white text-[10px] sm:text-base">08:30 م الرياض</span>
                   </div>
-                  <div className="flex items-center justify-center gap-1.5 sm:gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
-                    <Wifi className="w-4 h-4 sm:w-6 sm:h-6 text-[#f5a623] flex-shrink-0" />
-                    <span className="text-white text-xs sm:text-base">عبر الإنترنت</span>
+                  <div className="flex items-center justify-center gap-1 sm:gap-2 bg-white/5 rounded-lg p-1.5 sm:p-3">
+                    <Wifi className="w-3.5 h-3.5 sm:w-6 sm:h-6 text-[#f5a623] flex-shrink-0" />
+                    <span className="text-white text-[10px] sm:text-base">عبر الإنترنت</span>
                   </div>
                 </div>
 
 
                 {/* Countdown Timer - Mobile only */}
-                <div className="flex lg:hidden justify-center gap-2 sm:gap-4 mb-6 sm:mb-8" dir="ltr">
-                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-2 sm:p-4 min-w-[55px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
-                    <div className="text-xl sm:text-4xl font-bold text-white">{String(timeLeft.days).padStart(2, '0')}</div>
-                    <div className="text-[9px] sm:text-xs text-gray-400 mt-1">أيام</div>
+                <div className="flex lg:hidden justify-center gap-1.5 sm:gap-4 mb-6 sm:mb-8" dir="ltr">
+                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-1.5 sm:p-4 min-w-[50px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
+                    <div className="text-lg sm:text-4xl font-bold text-white">{String(timeLeft.days).padStart(2, '0')}</div>
+                    <div className="text-[8px] sm:text-xs text-gray-400 mt-0.5 sm:mt-1">أيام</div>
                   </div>
-                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-2 sm:p-4 min-w-[55px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
-                    <div className="text-xl sm:text-4xl font-bold text-white">{String(timeLeft.hours).padStart(2, '0')}</div>
-                    <div className="text-[9px] sm:text-xs text-gray-400 mt-1">ساعات</div>
+                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-1.5 sm:p-4 min-w-[50px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
+                    <div className="text-lg sm:text-4xl font-bold text-white">{String(timeLeft.hours).padStart(2, '0')}</div>
+                    <div className="text-[8px] sm:text-xs text-gray-400 mt-0.5 sm:mt-1">ساعات</div>
                   </div>
-                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-2 sm:p-4 min-w-[55px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
-                    <div className="text-xl sm:text-4xl font-bold text-white">{String(timeLeft.minutes).padStart(2, '0')}</div>
-                    <div className="text-[9px] sm:text-xs text-gray-400 mt-1">دقائق</div>
+                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-1.5 sm:p-4 min-w-[50px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
+                    <div className="text-lg sm:text-4xl font-bold text-white">{String(timeLeft.minutes).padStart(2, '0')}</div>
+                    <div className="text-[8px] sm:text-xs text-gray-400 mt-0.5 sm:mt-1">دقائق</div>
                   </div>
-                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-2 sm:p-4 min-w-[55px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
-                    <div className="text-xl sm:text-4xl font-bold text-white">{String(timeLeft.seconds).padStart(2, '0')}</div>
-                    <div className="text-[9px] sm:text-xs text-gray-400 mt-1">ثواني</div>
+                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-1.5 sm:p-4 min-w-[50px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
+                    <div className="text-lg sm:text-4xl font-bold text-white">{String(timeLeft.seconds).padStart(2, '0')}</div>
+                    <div className="text-[8px] sm:text-xs text-gray-400 mt-0.5 sm:mt-1">ثواني</div>
                   </div>
                 </div>
 
@@ -310,34 +309,34 @@ export function WebinarPage() {
               </div>
 
               {/* Promo Banner - Mobile only (above form) */}
-              <div className="sm:hidden order-2 flex bg-gradient-to-r from-[#10b981] via-[#3b82f6] to-[#8b5cf6] rounded-lg p-3 items-center justify-center gap-3 border border-white/20" dir="rtl">
-                <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+              <div className="sm:hidden order-2 flex bg-gradient-to-r from-[#10b981] via-[#3b82f6] to-[#8b5cf6] rounded-lg p-2 items-center justify-center gap-2 border border-white/20" dir="rtl">
+                <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0 text-sm">
                   🎁
                 </div>
-                <div className="text-center">
-                  <p className="text-white font-bold text-sm">مفاجأت كبيرة!</p>
-                  <p className="text-gray-300 text-xs">بانتظاركم في نهاية الندوة</p>
-                  <p className="text-[#f5a623] font-bold text-xs">اختيار فائز بجائزة اشتراك بريميوم في كوانتروك</p>
+                <div className="text-center min-w-0">
+                  <p className="text-white font-bold text-xs">مفاجأت كبيرة!</p>
+                  <p className="text-gray-300 text-[10px]">بانتظاركم في نهاية الندوة</p>
+                  <p className="text-[#f5a623] font-bold text-[10px] truncate">اختيار فائز بجائزة اشتراك بريميوم</p>
                 </div>
               </div>
 
               {/* Instructor Section - Mobile only */}
-              <div className="lg:hidden order-2 mt-4 bg-gradient-to-r from-[#f5a623] to-[#8b5cf6] rounded-lg p-[2px]" dir="rtl">
-              <div className="bg-[#1a1040] backdrop-blur rounded-lg p-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#f5a623] to-[#e09515] p-1 flex-shrink-0">
+              <div className="lg:hidden order-2 mt-3 sm:mt-4 bg-gradient-to-r from-[#f5a623] to-[#8b5cf6] rounded-lg p-[1px] sm:p-[2px]" dir="rtl">
+              <div className="bg-[#1a1040] backdrop-blur rounded-lg p-2 sm:p-3">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-[#f5a623] to-[#e09515] p-0.5 sm:p-1 flex-shrink-0">
                     <div className="w-full h-full rounded-full overflow-hidden">
                       <div className="w-full h-full bg-gradient-to-br from-[#1a2744] to-[#2a3754] flex items-center justify-center">
-                        <svg className="w-7 h-7 text-[#f5a623]" fill="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 sm:w-7 sm:h-7 text-[#f5a623]" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                         </svg>
                       </div>
                     </div>
                   </div>
-                  <div className="flex-1 text-right">
-                    <p className="text-[#f5a623] text-[10px] mb-0.5">المحاضر</p>
-                    <h3 className="text-sm font-bold text-white">أ. أحمد العزازي</h3>
-                    <p className="text-gray-300 text-[10px] leading-relaxed mt-0.5">
+                  <div className="flex-1 text-right min-w-0">
+                    <p className="text-[#f5a623] text-[9px] sm:text-[10px] mb-0.5">المحاضر</p>
+                    <h3 className="text-xs sm:text-sm font-bold text-white">أ. أحمد العزازي</h3>
+                    <p className="text-gray-300 text-[9px] sm:text-[10px] leading-relaxed mt-0.5 truncate">
                       محاضر ومصمّم برامج تدريبية في الأسهم الأمريكية والفوركس
                     </p>
                   </div>

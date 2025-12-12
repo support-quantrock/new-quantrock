@@ -250,42 +250,42 @@ export function WebinarDashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Webinar Registrations</h1>
-          <p className="text-gray-400 mt-1">Manage webinar attendees and track registrations</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-white">Webinar Registrations</h1>
+          <p className="text-gray-400 mt-1 text-sm sm:text-base">Manage webinar attendees and track registrations</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={fetchRegistrations}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors"
+            className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors text-sm sm:text-base"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
+            <span className="hidden xs:inline">Refresh</span>
           </button>
           <button
             onClick={exportToCSV}
-            className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-white transition-colors"
+            className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-white transition-colors text-sm sm:text-base"
           >
             <Download className="w-4 h-4" />
-            Export CSV
+            <span className="hidden xs:inline">Export</span> CSV
           </button>
         </div>
       </div>
 
       {/* Calendar Date Picker - Matching Reference Design */}
-      <div className="bg-white/5 rounded-2xl p-4 sm:p-6">
-        <div className="flex items-center gap-3">
+      <div className="bg-white/5 rounded-xl sm:rounded-2xl p-2 sm:p-4 md:p-6">
+        <div className="flex items-center gap-1 sm:gap-3">
           {/* Left Arrow */}
           <button
             onClick={() => scrollCalendar('left')}
-            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-200/10 hover:bg-gray-200/20 flex items-center justify-center text-gray-400 hover:text-white transition-colors shadow-lg"
+            className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-gray-200/10 hover:bg-gray-200/20 flex items-center justify-center text-gray-400 hover:text-white transition-colors shadow-lg"
           >
-            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
           </button>
 
           {/* Scrollable Calendar */}
           <div
             ref={scrollContainerRef}
-            className="flex-1 overflow-x-auto scrollbar-hide flex gap-2 sm:gap-4 py-2"
+            className="flex-1 overflow-x-auto scrollbar-hide flex gap-1.5 sm:gap-2 md:gap-4 py-1 sm:py-2"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {calendarDates.map((dateInfo, index) => {
@@ -298,7 +298,7 @@ export function WebinarDashboard() {
                   data-date={dateStr}
                   onClick={() => dateInfo.hasWebinar && setSelectedDate(dateStr)}
                   disabled={!dateInfo.hasWebinar}
-                  className={`flex-shrink-0 w-[70px] sm:w-[90px] rounded-2xl p-3 sm:p-4 text-center transition-all duration-300 shadow-md ${
+                  className={`flex-shrink-0 w-[52px] sm:w-[70px] md:w-[90px] rounded-xl sm:rounded-2xl p-2 sm:p-3 md:p-4 text-center transition-all duration-300 shadow-md ${
                     isSelected
                       ? 'bg-[#22c55e] text-white shadow-xl shadow-green-500/40 scale-105'
                       : dateInfo.hasWebinar
@@ -306,17 +306,17 @@ export function WebinarDashboard() {
                         : 'bg-gray-300/30 text-gray-500 cursor-not-allowed'
                   }`}
                 >
-                  <div className={`text-[10px] sm:text-xs font-semibold mb-1 uppercase tracking-wide ${
+                  <div className={`text-[8px] sm:text-[10px] md:text-xs font-semibold mb-0.5 sm:mb-1 uppercase tracking-wide ${
                     isSelected ? 'text-white/90' : dateInfo.hasWebinar ? 'text-gray-500' : 'text-gray-400'
                   }`}>
                     {getDayName(dateInfo.date)}
                   </div>
-                  <div className={`text-2xl sm:text-4xl font-bold mb-1 ${
+                  <div className={`text-lg sm:text-2xl md:text-4xl font-bold mb-0.5 sm:mb-1 ${
                     isSelected ? 'text-white' : dateInfo.hasWebinar ? 'text-gray-800' : 'text-gray-400'
                   }`}>
                     {dateInfo.date.getDate()}
                   </div>
-                  <div className={`text-[10px] sm:text-xs font-semibold uppercase tracking-wide ${
+                  <div className={`text-[8px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-wide ${
                     isSelected ? 'text-white/90' : dateInfo.hasWebinar ? 'text-gray-500' : 'text-gray-400'
                   }`}>
                     {getMonthName(dateInfo.date)}
@@ -329,24 +329,24 @@ export function WebinarDashboard() {
           {/* Right Arrow */}
           <button
             onClick={() => scrollCalendar('right')}
-            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-200/10 hover:bg-gray-200/20 flex items-center justify-center text-gray-400 hover:text-white transition-colors shadow-lg"
+            className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-gray-200/10 hover:bg-gray-200/20 flex items-center justify-center text-gray-400 hover:text-white transition-colors shadow-lg"
           >
-            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
           </button>
         </div>
       </div>
 
       {/* Stats Card */}
-      <div className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 rounded-xl p-6 border border-purple-500/20">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-xl bg-purple-500/20 flex items-center justify-center">
-            <Users className="w-7 h-7 text-purple-400" />
+      <div className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 rounded-xl p-4 sm:p-6 border border-purple-500/20">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+            <Users className="w-6 h-6 sm:w-7 sm:h-7 text-purple-400" />
           </div>
-          <div>
-            <p className="text-gray-400 text-sm">
+          <div className="min-w-0">
+            <p className="text-gray-400 text-xs sm:text-sm truncate">
               {selectedWebinar ? selectedWebinar[1].name : 'All'} Registrations
             </p>
-            <p className="text-white text-3xl font-bold">{selectedDateCount}</p>
+            <p className="text-white text-2xl sm:text-3xl font-bold">{selectedDateCount}</p>
             {selectedWebinar && (
               <p className="text-purple-400 text-xs mt-1">{selectedWebinar[1].displayDate}</p>
             )}
@@ -366,7 +366,7 @@ export function WebinarDashboard() {
         />
       </div>
 
-      {/* Table */}
+      {/* Table - Desktop / Cards - Mobile */}
       <div className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 rounded-xl border border-purple-500/20 overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-12">
@@ -383,93 +383,146 @@ export function WebinarDashboard() {
             )}
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-purple-500/20">
-                  <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Name</th>
-                  <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Email</th>
-                  <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Mobile</th>
-                  <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Country</th>
-                  <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Webinar</th>
-                  <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Referrer</th>
-                  <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Registered</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredByDate.map((reg) => (
-                  <tr key={reg.id} className="border-b border-purple-500/10 hover:bg-white/5 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
-                          <span className="text-white font-bold text-sm">
-                            {reg.name.charAt(0).toUpperCase()}
-                          </span>
-                        </div>
-                        <span className="text-white font-medium">{reg.name}</span>
+          <>
+            {/* Mobile Cards View */}
+            <div className="md:hidden divide-y divide-purple-500/20">
+              {filteredByDate.map((reg) => (
+                <div key={reg.id} className="p-4 space-y-3">
+                  {/* Header with name and avatar */}
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center flex-shrink-0">
+                      <span className="text-white font-bold">
+                        {reg.name.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white font-medium truncate">{reg.name}</p>
+                      <p className="text-gray-400 text-xs truncate">{reg.country}</p>
+                    </div>
+                  </div>
+
+                  {/* Contact info */}
+                  <div className="grid grid-cols-1 gap-2 text-sm">
+                    <a href={`mailto:${reg.email}`} className="text-gray-300 hover:text-purple-400 flex items-center gap-2 truncate">
+                      <Mail className="w-4 h-4 flex-shrink-0" />
+                      <span className="truncate">{reg.email}</span>
+                    </a>
+                    <a href={`tel:${reg.mobile}`} className="text-gray-300 hover:text-purple-400 flex items-center gap-2">
+                      <Phone className="w-4 h-4 flex-shrink-0" />
+                      {reg.mobile}
+                    </a>
+                  </div>
+
+                  {/* Webinar & Referrer */}
+                  <div className="flex flex-wrap items-center gap-3 text-xs">
+                    <div className="flex items-center gap-1.5 text-purple-400">
+                      <Video className="w-3.5 h-3.5" />
+                      <span>{webinarDates[reg.webinar_id]?.displayDate || reg.webinar_id}</span>
+                    </div>
+                    {reg.referrer_code && (
+                      <div className="flex items-center gap-1.5 text-[#f5a623]">
+                        <Link2 className="w-3.5 h-3.5" />
+                        <span>{reg.referrer_code}</span>
                       </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <a href={`mailto:${reg.email}`} className="text-gray-300 hover:text-purple-400 flex items-center gap-2">
-                        <Mail className="w-4 h-4" />
-                        {reg.email}
-                      </a>
-                    </td>
-                    <td className="px-6 py-4">
-                      <a href={`tel:${reg.mobile}`} className="text-gray-300 hover:text-purple-400 flex items-center gap-2">
-                        <Phone className="w-4 h-4" />
-                        {reg.mobile}
-                      </a>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-gray-300 text-sm">
-                        <MapPin className="w-4 h-4" />
-                        {reg.country}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm">
-                        <div className="flex items-center gap-2 text-white font-medium">
-                          <Video className="w-4 h-4 text-purple-400" />
-                          {webinarDates[reg.webinar_id]?.name || reg.webinar_id}
-                        </div>
-                        <p className="text-gray-500 text-xs mt-1">
-                          {webinarDates[reg.webinar_id]?.displayDate || '-'}
-                        </p>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      {reg.referrer_code ? (
-                        <div className="text-sm">
-                          {reg.referrer_name && (
-                            <p className="text-white font-medium">{reg.referrer_name}</p>
-                          )}
-                          <div className="flex items-center gap-2 text-[#f5a623]">
-                            <Link2 className="w-4 h-4" />
-                            {reg.referrer_code}
-                          </div>
-                        </div>
-                      ) : (
-                        <span className="text-gray-500 text-sm">-</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-gray-400 text-sm">
-                        <Calendar className="w-4 h-4" />
-                        {new Date(reg.created_at).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </div>
-                    </td>
+                    )}
+                    <div className="flex items-center gap-1.5 text-gray-500 ml-auto">
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span>{new Date(reg.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-purple-500/20">
+                    <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Name</th>
+                    <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Email</th>
+                    <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Mobile</th>
+                    <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Country</th>
+                    <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Webinar</th>
+                    <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Referrer</th>
+                    <th className="text-left px-6 py-4 text-gray-400 font-medium text-sm">Registered</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {filteredByDate.map((reg) => (
+                    <tr key={reg.id} className="border-b border-purple-500/10 hover:bg-white/5 transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+                            <span className="text-white font-bold text-sm">
+                              {reg.name.charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                          <span className="text-white font-medium">{reg.name}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <a href={`mailto:${reg.email}`} className="text-gray-300 hover:text-purple-400 flex items-center gap-2">
+                          <Mail className="w-4 h-4" />
+                          {reg.email}
+                        </a>
+                      </td>
+                      <td className="px-6 py-4">
+                        <a href={`tel:${reg.mobile}`} className="text-gray-300 hover:text-purple-400 flex items-center gap-2">
+                          <Phone className="w-4 h-4" />
+                          {reg.mobile}
+                        </a>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2 text-gray-300 text-sm">
+                          <MapPin className="w-4 h-4" />
+                          {reg.country}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm">
+                          <div className="flex items-center gap-2 text-white font-medium">
+                            <Video className="w-4 h-4 text-purple-400" />
+                            {webinarDates[reg.webinar_id]?.name || reg.webinar_id}
+                          </div>
+                          <p className="text-gray-500 text-xs mt-1">
+                            {webinarDates[reg.webinar_id]?.displayDate || '-'}
+                          </p>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        {reg.referrer_code ? (
+                          <div className="text-sm">
+                            {reg.referrer_name && (
+                              <p className="text-white font-medium">{reg.referrer_name}</p>
+                            )}
+                            <div className="flex items-center gap-2 text-[#f5a623]">
+                              <Link2 className="w-4 h-4" />
+                              {reg.referrer_code}
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="text-gray-500 text-sm">-</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2 text-gray-400 text-sm">
+                          <Calendar className="w-4 h-4" />
+                          {new Date(reg.created_at).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
 

@@ -29,6 +29,7 @@ interface WebinarReferral {
   id: string;
   name: string;
   email: string;
+  mobile: string;
   created_at: string;
 }
 
@@ -92,7 +93,7 @@ export function ReferralsPage() {
         const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
         const webinarResponse = await fetch(
-          `${supabaseUrl}/rest/v1/webinar_registrations?referrer_code=eq.${profile.referral_code}&select=id,name,email,created_at&order=created_at.desc`,
+          `${supabaseUrl}/rest/v1/webinar_registrations?referrer_code=eq.${profile.referral_code}&select=id,name,email,mobile,created_at&order=created_at.desc`,
           {
             headers: {
               'apikey': supabaseKey,
@@ -481,6 +482,7 @@ export function ReferralsPage() {
                   <tr className="border-b border-purple-500/20">
                     <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Name</th>
                     <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Email</th>
+                    <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Phone</th>
                     <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Date</th>
                     <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Status</th>
                   </tr>
@@ -502,6 +504,11 @@ export function ReferralsPage() {
                       </td>
                       <td className="py-4 px-4 text-gray-400">
                         {referral.email}
+                      </td>
+                      <td className="py-4 px-4 text-gray-400">
+                        <a href={`tel:${referral.mobile}`} className="hover:text-purple-400 transition-colors">
+                          {referral.mobile || '-'}
+                        </a>
                       </td>
                       <td className="py-4 px-4 text-gray-400">
                         {new Date(referral.created_at).toLocaleDateString()}
@@ -532,9 +539,14 @@ export function ReferralsPage() {
                         <span className="text-white text-sm font-medium block">
                           {referral.name || 'Anonymous'}
                         </span>
-                        <span className="text-gray-500 text-xs">
+                        <span className="text-gray-500 text-xs block">
                           {referral.email}
                         </span>
+                        {referral.mobile && (
+                          <a href={`tel:${referral.mobile}`} className="text-gray-500 text-xs hover:text-purple-400">
+                            {referral.mobile}
+                          </a>
+                        )}
                       </div>
                     </div>
                     <span className="px-2 py-1 rounded-full text-[10px] font-medium bg-green-500/20 text-green-400">
