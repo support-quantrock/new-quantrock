@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Users, Mail, Phone, Calendar, Download, Search, RefreshCw, MapPin, Video, Link2 } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Users, Mail, Phone, Calendar, Download, Search, RefreshCw, MapPin, Video, Link2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface WebinarRegistration {
   id: string;
@@ -13,16 +13,50 @@ interface WebinarRegistration {
   referrer_name?: string;
 }
 
-// Map webinar IDs to names, dates, and status
-const webinarInfo: Record<string, { name: string; date: string; status: 'current' | 'previous' }> = {
-  'dec-2025': { name: 'ندوة ديسمبر 2025', date: '13 ديسمبر 2025', status: 'current' },
+// Map webinar IDs to names and actual dates (YYYY-MM-DD format)
+const webinarDates: Record<string, { name: string; date: string; displayDate: string }> = {
+  'dec-2025': { name: 'ندوة ديسمبر 2025', date: '2025-12-13', displayDate: '13 ديسمبر 2025' },
+};
+
+// Generate calendar dates for the date picker
+const generateCalendarDates = () => {
+  const dates: { date: Date; hasWebinar: boolean; webinarId: string | null; registrationCount?: number }[] = [];
+  const today = new Date();
+
+  // Generate dates from 30 days ago to 60 days ahead
+  for (let i = -30; i <= 60; i++) {
+    const date = new Date(today);
+    date.setDate(today.getDate() + i);
+
+    // Check if this date has a webinar
+    const dateStr = date.toISOString().split('T')[0];
+    const webinarEntry = Object.entries(webinarDates).find(([_, info]) => info.date === dateStr);
+
+    dates.push({
+      date,
+      hasWebinar: !!webinarEntry,
+      webinarId: webinarEntry ? webinarEntry[0] : null
+    });
+  }
+
+  return dates;
 };
 
 export function WebinarDashboard() {
   const [registrations, setRegistrations] = useState<WebinarRegistration[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState<'current' | 'previous'>('current');
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [calendarDates, setCalendarDates] = useState(generateCalendarDates());
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Find and select the first webinar date on mount
+  useEffect(() => {
+    const firstWebinarDate = calendarDates.find(d => d.hasWebinar);
+    if (firstWebinarDate) {
+      setSelectedDate(firstWebinarDate.date.toISOString().split('T')[0]);
+    }
+  }, []);
 
   const fetchRegistrations = async () => {
     setLoading(true);
@@ -75,6 +109,16 @@ export function WebinarDashboard() {
         }
 
         setRegistrations(data || []);
+
+        // Update calendar dates with registration counts
+        const updatedDates = calendarDates.map(d => {
+          if (d.webinarId) {
+            const count = data.filter((r: WebinarRegistration) => r.webinar_id === d.webinarId).length;
+            return { ...d, registrationCount: count };
+          }
+          return d;
+        });
+        setCalendarDates(updatedDates);
       }
     } catch (err) {
       console.error('Error:', err);
@@ -87,18 +131,39 @@ export function WebinarDashboard() {
     fetchRegistrations();
   }, []);
 
+  // Scroll calendar left/right
+  const scrollCalendar = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 400;
+      scrollContainerRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  // Center on selected date when it changes
+  useEffect(() => {
+    if (selectedDate && scrollContainerRef.current) {
+      const selectedElement = scrollContainerRef.current.querySelector(`[data-date="${selectedDate}"]`);
+      if (selectedElement) {
+        selectedElement.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+    }
+  }, [selectedDate]);
+
   const exportToCSV = () => {
     const headers = ['Name', 'Email', 'Mobile', 'Country', 'Webinar Name', 'Webinar Date', 'Referrer Code', 'Registered At'];
     const csvContent = [
       headers.join(','),
-      ...filteredRegistrations.map(reg =>
+      ...filteredByDate.map(reg =>
         [
           `"${reg.name}"`,
           reg.email,
           reg.mobile,
           `"${reg.country}"`,
-          `"${webinarInfo[reg.webinar_id]?.name || reg.webinar_id}"`,
-          `"${webinarInfo[reg.webinar_id]?.date || '-'}"`,
+          `"${webinarDates[reg.webinar_id]?.name || reg.webinar_id}"`,
+          `"${webinarDates[reg.webinar_id]?.displayDate || '-'}"`,
           reg.referrer_code || '-',
           new Date(reg.created_at).toLocaleString()
         ].join(',')
@@ -108,7 +173,7 @@ export function WebinarDashboard() {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `webinar-registrations-${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = `webinar-registrations-${selectedDate || 'all'}.csv`;
     link.click();
   };
 
@@ -120,15 +185,32 @@ export function WebinarDashboard() {
     return matchesSearch;
   });
 
-  // Filter by tab (current/previous)
-  const filteredByTab = filteredRegistrations.filter(reg => {
-    const info = webinarInfo[reg.webinar_id];
-    return info?.status === activeTab;
+  // Filter by selected date
+  const filteredByDate = filteredRegistrations.filter(reg => {
+    if (!selectedDate) return true;
+    const webinarInfo = webinarDates[reg.webinar_id];
+    return webinarInfo?.date === selectedDate;
   });
 
-  // Count registrations by status for tab badges
-  const currentCount = registrations.filter(reg => webinarInfo[reg.webinar_id]?.status === 'current').length;
-  const previousCount = registrations.filter(reg => webinarInfo[reg.webinar_id]?.status === 'previous').length;
+  // Get count for selected date
+  const selectedDateCount = selectedDate
+    ? registrations.filter(reg => webinarDates[reg.webinar_id]?.date === selectedDate).length
+    : registrations.length;
+
+  // Get selected webinar info
+  const selectedWebinar = selectedDate
+    ? Object.entries(webinarDates).find(([_, info]) => info.date === selectedDate)
+    : null;
+
+  // Format day name
+  const getDayName = (date: Date) => {
+    return date.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
+  };
+
+  // Format month name
+  const getMonthName = (date: Date) => {
+    return date.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+  };
 
   return (
     <div className="space-y-6">
@@ -156,6 +238,73 @@ export function WebinarDashboard() {
         </div>
       </div>
 
+      {/* Calendar Date Picker */}
+      <div className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 rounded-xl p-4 border border-purple-500/20">
+        <div className="flex items-center gap-2">
+          {/* Left Arrow */}
+          <button
+            onClick={() => scrollCalendar('left')}
+            className="flex-shrink-0 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          {/* Scrollable Calendar */}
+          <div
+            ref={scrollContainerRef}
+            className="flex-1 overflow-x-auto scrollbar-hide flex gap-3 py-2 px-1"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {calendarDates.map((dateInfo, index) => {
+              const dateStr = dateInfo.date.toISOString().split('T')[0];
+              const isSelected = selectedDate === dateStr;
+              const isToday = dateStr === new Date().toISOString().split('T')[0];
+
+              return (
+                <button
+                  key={index}
+                  data-date={dateStr}
+                  onClick={() => dateInfo.hasWebinar && setSelectedDate(dateStr)}
+                  disabled={!dateInfo.hasWebinar}
+                  className={`flex-shrink-0 w-20 sm:w-24 rounded-xl p-3 sm:p-4 text-center transition-all duration-300 ${
+                    isSelected
+                      ? 'bg-[#22c55e] text-white shadow-lg shadow-green-500/30 scale-105'
+                      : dateInfo.hasWebinar
+                        ? 'bg-white/10 hover:bg-white/20 text-white cursor-pointer'
+                        : 'bg-black/20 text-gray-500 cursor-not-allowed opacity-50'
+                  } ${isToday && !isSelected ? 'ring-2 ring-purple-500/50' : ''}`}
+                >
+                  <div className={`text-[10px] sm:text-xs font-medium mb-1 ${isSelected ? 'text-white' : 'text-gray-400'}`}>
+                    {getDayName(dateInfo.date)}
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-bold mb-1">
+                    {dateInfo.date.getDate()}
+                  </div>
+                  <div className={`text-[10px] sm:text-xs font-medium ${isSelected ? 'text-white' : 'text-gray-400'}`}>
+                    {getMonthName(dateInfo.date)}
+                  </div>
+                  {dateInfo.hasWebinar && dateInfo.registrationCount !== undefined && (
+                    <div className={`mt-1 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full ${
+                      isSelected ? 'bg-white/20' : 'bg-purple-500/30 text-purple-300'
+                    }`}>
+                      {dateInfo.registrationCount} reg
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Right Arrow */}
+          <button
+            onClick={() => scrollCalendar('right')}
+            className="flex-shrink-0 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
       {/* Stats Card */}
       <div className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 rounded-xl p-6 border border-purple-500/20">
         <div className="flex items-center gap-4">
@@ -163,44 +312,15 @@ export function WebinarDashboard() {
             <Users className="w-7 h-7 text-purple-400" />
           </div>
           <div>
-            <p className="text-gray-400 text-sm">{activeTab === 'current' ? 'Current' : 'Previous'} Registrations</p>
-            <p className="text-white text-3xl font-bold">{activeTab === 'current' ? currentCount : previousCount}</p>
+            <p className="text-gray-400 text-sm">
+              {selectedWebinar ? selectedWebinar[1].name : 'All'} Registrations
+            </p>
+            <p className="text-white text-3xl font-bold">{selectedDateCount}</p>
+            {selectedWebinar && (
+              <p className="text-purple-400 text-xs mt-1">{selectedWebinar[1].displayDate}</p>
+            )}
           </div>
         </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="flex gap-3">
-        <button
-          onClick={() => setActiveTab('current')}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all duration-300 ${
-            activeTab === 'current'
-              ? 'bg-gradient-to-r from-purple-600/40 to-blue-600/40 border-2 border-purple-500/70 text-white'
-              : 'bg-black/40 border border-purple-500/30 text-gray-400 hover:bg-purple-500/20 hover:text-white'
-          }`}
-        >
-          Current
-          <span className={`px-2 py-0.5 rounded-full text-xs ${
-            activeTab === 'current' ? 'bg-purple-500/30' : 'bg-gray-600/30'
-          }`}>
-            {currentCount}
-          </span>
-        </button>
-        <button
-          onClick={() => setActiveTab('previous')}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all duration-300 ${
-            activeTab === 'previous'
-              ? 'bg-gradient-to-r from-purple-600/40 to-blue-600/40 border-2 border-purple-500/70 text-white'
-              : 'bg-black/40 border border-purple-500/30 text-gray-400 hover:bg-purple-500/20 hover:text-white'
-          }`}
-        >
-          Previous
-          <span className={`px-2 py-0.5 rounded-full text-xs ${
-            activeTab === 'previous' ? 'bg-purple-500/30' : 'bg-gray-600/30'
-          }`}>
-            {previousCount}
-          </span>
-        </button>
       </div>
 
       {/* Search */}
@@ -221,10 +341,15 @@ export function WebinarDashboard() {
           <div className="flex items-center justify-center py-12">
             <RefreshCw className="w-8 h-8 text-purple-400 animate-spin" />
           </div>
-        ) : filteredByTab.length === 0 ? (
+        ) : filteredByDate.length === 0 ? (
           <div className="text-center py-12">
             <Users className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-            <p className="text-gray-400">No {activeTab} webinar registrations found</p>
+            <p className="text-gray-400">No registrations found for selected date</p>
+            {selectedDate && (
+              <p className="text-gray-500 text-sm mt-2">
+                Try selecting a different webinar date
+              </p>
+            )}
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -241,7 +366,7 @@ export function WebinarDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {filteredByTab.map((reg) => (
+                {filteredByDate.map((reg) => (
                   <tr key={reg.id} className="border-b border-purple-500/10 hover:bg-white/5 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
@@ -275,10 +400,10 @@ export function WebinarDashboard() {
                       <div className="text-sm">
                         <div className="flex items-center gap-2 text-white font-medium">
                           <Video className="w-4 h-4 text-purple-400" />
-                          {webinarInfo[reg.webinar_id]?.name || reg.webinar_id}
+                          {webinarDates[reg.webinar_id]?.name || reg.webinar_id}
                         </div>
                         <p className="text-gray-500 text-xs mt-1">
-                          {webinarInfo[reg.webinar_id]?.date || '-'}
+                          {webinarDates[reg.webinar_id]?.displayDate || '-'}
                         </p>
                       </div>
                     </td>
@@ -319,7 +444,8 @@ export function WebinarDashboard() {
 
       {/* Footer Stats */}
       <div className="text-center text-gray-400 text-sm">
-        Showing {filteredByTab.length} of {activeTab === 'current' ? currentCount : previousCount} {activeTab} webinar registrations
+        Showing {filteredByDate.length} of {selectedDateCount} registrations
+        {selectedWebinar && ` for ${selectedWebinar[1].name}`}
       </div>
     </div>
   );
