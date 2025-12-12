@@ -25,6 +25,13 @@ interface ReferralStats {
   totalClicks: number;
 }
 
+interface WebinarReferral {
+  id: string;
+  name: string;
+  email: string;
+  created_at: string;
+}
+
 export function ReferralsPage() {
   const { user, profile } = useAuth();
   const [stats, setStats] = useState<ReferralStats>({
@@ -34,6 +41,7 @@ export function ReferralsPage() {
     totalClicks: 0,
   });
   const [referrals, setReferrals] = useState<Referral[]>([]);
+  const [webinarReferrals, setWebinarReferrals] = useState<WebinarReferral[]>([]);
   const [copied, setCopied] = useState(false);
   const [copiedWebinar, setCopiedWebinar] = useState(false);
   const [showQR, setShowQR] = useState(false);
@@ -77,6 +85,28 @@ export function ReferralsPage() {
         .order('created_at', { ascending: false });
 
       setReferrals(referralsData || []);
+
+      // Fetch webinar referrals
+      if (profile?.referral_code) {
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+        const webinarResponse = await fetch(
+          `${supabaseUrl}/rest/v1/webinar_registrations?referrer_code=eq.${profile.referral_code}&select=id,name,email,created_at&order=created_at.desc`,
+          {
+            headers: {
+              'apikey': supabaseKey,
+              'Authorization': `Bearer ${supabaseKey}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (webinarResponse.ok) {
+          const webinarData = await webinarResponse.json();
+          setWebinarReferrals(webinarData || []);
+        }
+      }
 
       // Calculate stats
       const total = referralsData?.length || 0;
@@ -424,20 +454,23 @@ export function ReferralsPage() {
         </div>
       </motion.div> */}
 
-      {/* Referrals Table */}
+      {/* Webinar Referrals Table */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.55 }}
         className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-purple-500/20"
       >
-        <h2 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4">Referral History</h2>
+        <h2 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4 flex items-center gap-2">
+          <Video className="w-5 h-5 text-[#f5a623]" />
+          Webinar Referrals
+        </h2>
 
-        {referrals.length === 0 ? (
+        {webinarReferrals.length === 0 ? (
           <div className="text-center py-8 sm:py-12">
-            <Users className="w-12 h-12 sm:w-16 sm:h-16 text-gray-600 mx-auto mb-3 sm:mb-4" />
-            <p className="text-gray-400 mb-2 text-sm sm:text-base">No referrals yet</p>
-            <p className="text-gray-500 text-xs sm:text-sm">Share your link to start earning commissions!</p>
+            <Video className="w-12 h-12 sm:w-16 sm:h-16 text-gray-600 mx-auto mb-3 sm:mb-4" />
+            <p className="text-gray-400 mb-2 text-sm sm:text-base">No webinar referrals yet</p>
+            <p className="text-gray-500 text-xs sm:text-sm">Share your webinar link to get referrals!</p>
           </div>
         ) : (
           <>
@@ -446,41 +479,37 @@ export function ReferralsPage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-purple-500/20">
-                    <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">User</th>
+                    <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Name</th>
+                    <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Email</th>
                     <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Date</th>
                     <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Status</th>
-                    <th className="text-right py-3 px-4 text-gray-400 font-medium text-sm">Commission</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {referrals.map((referral) => (
+                  {webinarReferrals.map((referral) => (
                     <tr key={referral.id} className="border-b border-purple-500/10 hover:bg-purple-500/5">
                       <td className="py-4 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
-                            <span className="text-purple-400 font-bold">
-                              {(referral.referred_user as any)?.full_name?.charAt(0)?.toUpperCase() || '?'}
+                          <div className="w-10 h-10 rounded-full bg-[#f5a623]/20 flex items-center justify-center">
+                            <span className="text-[#f5a623] font-bold">
+                              {referral.name?.charAt(0)?.toUpperCase() || '?'}
                             </span>
                           </div>
                           <span className="text-white">
-                            {(referral.referred_user as any)?.full_name || 'Anonymous'}
+                            {referral.name || 'Anonymous'}
                           </span>
                         </div>
+                      </td>
+                      <td className="py-4 px-4 text-gray-400">
+                        {referral.email}
                       </td>
                       <td className="py-4 px-4 text-gray-400">
                         {new Date(referral.created_at).toLocaleDateString()}
                       </td>
                       <td className="py-4 px-4">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          referral.status === 'completed' ? 'bg-green-500/20 text-green-400' :
-                          referral.status === 'paid' ? 'bg-blue-500/20 text-blue-400' :
-                          'bg-amber-500/20 text-amber-400'
-                        }`}>
-                          {referral.status}
+                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
+                          Registered
                         </span>
-                      </td>
-                      <td className="py-4 px-4 text-right text-white font-medium">
-                        ${referral.commission_amount?.toFixed(2) || '0.00'}
                       </td>
                     </tr>
                   ))}
@@ -490,33 +519,31 @@ export function ReferralsPage() {
 
             {/* Mobile Card View */}
             <div className="sm:hidden space-y-3">
-              {referrals.map((referral) => (
+              {webinarReferrals.map((referral) => (
                 <div key={referral.id} className="bg-black/20 rounded-xl p-3">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center">
-                        <span className="text-purple-400 font-bold text-sm">
-                          {(referral.referred_user as any)?.full_name?.charAt(0)?.toUpperCase() || '?'}
+                      <div className="w-8 h-8 rounded-full bg-[#f5a623]/20 flex items-center justify-center">
+                        <span className="text-[#f5a623] font-bold text-sm">
+                          {referral.name?.charAt(0)?.toUpperCase() || '?'}
                         </span>
                       </div>
-                      <span className="text-white text-sm font-medium">
-                        {(referral.referred_user as any)?.full_name || 'Anonymous'}
-                      </span>
+                      <div>
+                        <span className="text-white text-sm font-medium block">
+                          {referral.name || 'Anonymous'}
+                        </span>
+                        <span className="text-gray-500 text-xs">
+                          {referral.email}
+                        </span>
+                      </div>
                     </div>
-                    <span className={`px-2 py-1 rounded-full text-[10px] font-medium ${
-                      referral.status === 'completed' ? 'bg-green-500/20 text-green-400' :
-                      referral.status === 'paid' ? 'bg-blue-500/20 text-blue-400' :
-                      'bg-amber-500/20 text-amber-400'
-                    }`}>
-                      {referral.status}
+                    <span className="px-2 py-1 rounded-full text-[10px] font-medium bg-green-500/20 text-green-400">
+                      Registered
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-gray-400">
                       {new Date(referral.created_at).toLocaleDateString()}
-                    </span>
-                    <span className="text-white font-medium">
-                      ${referral.commission_amount?.toFixed(2) || '0.00'}
                     </span>
                   </div>
                 </div>

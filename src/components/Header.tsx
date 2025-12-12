@@ -1,6 +1,6 @@
 import { Menu, ChevronDown, Globe, User, LogOut, LayoutDashboard } from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useLanguage, languages } from '../contexts/LanguageContext';
 import { useTranslation } from '../translations';
 import { useAuth } from '../contexts/AuthContext';
@@ -12,6 +12,8 @@ export function Header() {
   const { language, setLanguage } = useLanguage();
   const t = useTranslation(language);
   const { user, profile, signOut } = useAuth();
+  const location = useLocation();
+  const isWebinarsPage = location.pathname === '/webinars';
 
   const handleSignOut = async () => {
     await signOut();
@@ -67,7 +69,7 @@ export function Header() {
             )}
           </div>
 
-          {/* Auth Buttons */}
+          {/* Auth Buttons - Only show on webinars page */}
           {user ? (
             <div className="relative">
               <button
@@ -112,7 +114,7 @@ export function Header() {
                 </div>
               )}
             </div>
-          ) : (
+          ) : isWebinarsPage ? (
             <div className="flex items-center gap-3">
               <Link
                 to="/login"
@@ -127,7 +129,7 @@ export function Header() {
                 Sign Up
               </Link>
             </div>
-          )}
+          ) : null}
         </div>
 
         {/* Mobile Menu */}
@@ -234,7 +236,7 @@ export function Header() {
                   {t.nav.affiliate}
                 </a>
 
-                {/* Auth Links in Mobile Menu */}
+                {/* Auth Links in Mobile Menu - Only show on webinars page */}
                 {user ? (
                   <>
                     <Link
@@ -252,7 +254,7 @@ export function Header() {
                       Sign Out
                     </button>
                   </>
-                ) : (
+                ) : isWebinarsPage ? (
                   <>
                     <Link
                       to="/login"
@@ -267,7 +269,7 @@ export function Header() {
                       Sign Up
                     </Link>
                   </>
-                )}
+                ) : null}
               </div>
             )}
           </div>

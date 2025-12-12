@@ -12,8 +12,8 @@ export function WebinarPage() {
     name: '',
     email: '',
     mobile: '',
-    country: 'الإمارات العربية المتحدة',
-    countryCode: '+971'
+    country: 'المملكة العربية السعودية',
+    countryCode: '+966'
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -185,7 +185,7 @@ export function WebinarPage() {
 
   return (
     <PageLayout>
-      <div className="min-h-screen bg-[#1a2744]">
+      <div className="min-h-screen bg-[#1a1040] overflow-x-hidden w-full">
         {/* Top Banner Image */}
         <div className="pt-24 sm:pt-28 max-w-7xl mx-auto px-4 sm:px-6">
           <img
@@ -197,7 +197,7 @@ export function WebinarPage() {
 
         {/* Hero Section */}
         <div
-          className="relative pb-8 sm:pb-16 bg-[#1a2744]"
+          className="relative pb-8 sm:pb-16 bg-[#1a1040]"
         >
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
@@ -213,76 +213,66 @@ export function WebinarPage() {
                 </div>
 
                 {/* Main Title */}
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+                <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 leading-tight">
                   استراتيجيات كبـــار المستثمرين والبنوك الاستثمارية
                 </h1>
 
-                {/* Info Bar - 2 columns */}
-                <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
-                  <div className="flex items-center justify-center gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
-                    <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 text-[#f5a623]" />
-                    <span className="text-white font-medium text-sm sm:text-base">مجاناً</span>
-                  </div>
-                  <div className="flex items-center justify-center gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
-                    <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-[#f5a623]" />
-                    <span className="text-white text-sm sm:text-base">السبت 13 ديسمبر</span>
-                  </div>
-                  <div className="flex items-center justify-center gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
-                    <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-[#f5a623]" />
-                    <span className="text-white text-sm sm:text-base">08:30 م بتوقيت الرياض</span>
-                  </div>
-                  <div className="flex items-center justify-center gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
-                    <Wifi className="w-5 h-5 sm:w-6 sm:h-6 text-[#f5a623]" />
-                    <span className="text-white text-sm sm:text-base">عبر الإنترنت</span>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p className="text-gray-300 mb-4 sm:mb-6 text-base sm:text-lg leading-relaxed">
-                  قم بتسجيل حضورك الآن في هذه الندوة المميّزة ولا تفوّت فرصة الاستفادة من أمهر الخبراء في التداول بالسوق الأمريكي
-                </p>
-
                 {/* Description Text */}
-                <div className="bg-white/5 backdrop-blur rounded-lg p-4 sm:p-6 mb-6 sm:mb-8 border border-white/10">
-                  <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
-                    تعرف على استراتيجيات كبار المستثمرين والبنوك الاستثمارية في السوق الأمريكي.
-                    سنتناول تحركات صناديق التحوط وبيوت الخبرة والبنوك، صفقات المطلعين والكونغرس،
-                    تدفق السيولة، وأقوى التحليلات المالية بالذكاء الاصطناعي.
-                  </p>
+                <div className="text-gray-300 leading-relaxed text-xs sm:text-base mb-3 sm:mb-6">
+                  <p className="mb-3">تعرف على استراتيجيات كبار المستثمرين والبنوك الاستثمارية التي تحرّك الأسواق قبل الجميع، من خلال محتوى عميق وعملي يشمل:</p>
+                  <ul className="space-y-1.5 sm:space-y-2 mb-3">
+                    <li>🏦 تحليل استراتيجيات البنوك الاستثمارية الكبرى وكيف تؤثر على اتجاه السوق</li>
+                    <li>📊 رصد تحركات صناديق التحوط وبيوت الخبرة قبل انعكاسها على الأسعار</li>
+                    <li>🕵️‍♂️ كشف صفقات المطلعين والكونغرس وما تعنيه للمستثمر الذكي</li>
+                    <li>💰 متابعة تدفّق السيولة لحظة بلحظة لمعرفة أين يتجه المال</li>
+                    <li>🤖 أقوى التحليلات بالذكاء الاصطناعي لرؤية أعمق وقرارات أدق</li>
+                  </ul>
+                  <p>كل ذلك لتمنحك أفضلية حقيقية في السوق، وقرارات استثمارية أذكى، وخطوات واثقة نحو النجاح في عالم الاستثمار.</p>
                 </div>
 
-                {/* Countdown Timer */}
-                <div className="flex justify-center gap-3 sm:gap-4 mb-6 sm:mb-8" dir="ltr">
-                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-3 sm:p-4 min-w-[60px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
-                    <div className="text-2xl sm:text-4xl font-bold text-white">{String(timeLeft.days).padStart(2, '0')}</div>
-                    <div className="text-[10px] sm:text-xs text-gray-400 mt-1">أيام</div>
+                {/* Info Bar - 2 columns */}
+                <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-4 sm:mb-6">
+                  <div className="flex items-center justify-center gap-1.5 sm:gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
+                    <DollarSign className="w-4 h-4 sm:w-6 sm:h-6 text-[#f5a623] flex-shrink-0" />
+                    <span className="text-white font-medium text-xs sm:text-base">مجاناً</span>
                   </div>
-                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-3 sm:p-4 min-w-[60px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
-                    <div className="text-2xl sm:text-4xl font-bold text-white">{String(timeLeft.hours).padStart(2, '0')}</div>
-                    <div className="text-[10px] sm:text-xs text-gray-400 mt-1">ساعات</div>
+                  <div className="flex items-center justify-center gap-1.5 sm:gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
+                    <Calendar className="w-4 h-4 sm:w-6 sm:h-6 text-[#f5a623] flex-shrink-0" />
+                    <span className="text-white text-xs sm:text-base">السبت 13 ديسمبر</span>
                   </div>
-                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-3 sm:p-4 min-w-[60px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
-                    <div className="text-2xl sm:text-4xl font-bold text-white">{String(timeLeft.minutes).padStart(2, '0')}</div>
-                    <div className="text-[10px] sm:text-xs text-gray-400 mt-1">دقائق</div>
+                  <div className="flex items-center justify-center gap-1.5 sm:gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
+                    <Clock className="w-4 h-4 sm:w-6 sm:h-6 text-[#f5a623] flex-shrink-0" />
+                    <span className="text-white text-xs sm:text-base">08:30 م الرياض</span>
                   </div>
-                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-3 sm:p-4 min-w-[60px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
-                    <div className="text-2xl sm:text-4xl font-bold text-white">{String(timeLeft.seconds).padStart(2, '0')}</div>
-                    <div className="text-[10px] sm:text-xs text-gray-400 mt-1">ثواني</div>
+                  <div className="flex items-center justify-center gap-1.5 sm:gap-2 bg-white/5 rounded-lg p-2 sm:p-3">
+                    <Wifi className="w-4 h-4 sm:w-6 sm:h-6 text-[#f5a623] flex-shrink-0" />
+                    <span className="text-white text-xs sm:text-base">عبر الإنترنت</span>
                   </div>
                 </div>
 
-                {/* Sponsor - Hidden on mobile */}
-                <div className="hidden sm:block text-center">
-                  <p className="text-gray-400 mb-3">برعاية</p>
-                  <div className="inline-block">
-                    <div className="bg-[#1a3a5c] px-6 py-3 rounded-lg">
-                      <span className="text-white font-bold text-xl">QUANTROCK</span>
-                    </div>
+
+                {/* Countdown Timer - Mobile only */}
+                <div className="flex lg:hidden justify-center gap-2 sm:gap-4 mb-6 sm:mb-8" dir="ltr">
+                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-2 sm:p-4 min-w-[55px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
+                    <div className="text-xl sm:text-4xl font-bold text-white">{String(timeLeft.days).padStart(2, '0')}</div>
+                    <div className="text-[9px] sm:text-xs text-gray-400 mt-1">أيام</div>
+                  </div>
+                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-2 sm:p-4 min-w-[55px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
+                    <div className="text-xl sm:text-4xl font-bold text-white">{String(timeLeft.hours).padStart(2, '0')}</div>
+                    <div className="text-[9px] sm:text-xs text-gray-400 mt-1">ساعات</div>
+                  </div>
+                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-2 sm:p-4 min-w-[55px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
+                    <div className="text-xl sm:text-4xl font-bold text-white">{String(timeLeft.minutes).padStart(2, '0')}</div>
+                    <div className="text-[9px] sm:text-xs text-gray-400 mt-1">دقائق</div>
+                  </div>
+                  <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-2 sm:p-4 min-w-[55px] sm:min-w-[80px] text-center border border-purple-500/30 shadow-lg">
+                    <div className="text-xl sm:text-4xl font-bold text-white">{String(timeLeft.seconds).padStart(2, '0')}</div>
+                    <div className="text-[9px] sm:text-xs text-gray-400 mt-1">ثواني</div>
                   </div>
                 </div>
 
                 {/* Promo Banner - Desktop only */}
-                <div className="hidden sm:flex mt-6 bg-gradient-to-r from-[#1a1f4d] to-[#2d1b4e] rounded-lg p-4 items-center justify-center gap-3 border border-purple-500/30">
+                <div className="hidden sm:flex mt-6 bg-gradient-to-r from-[#10b981] via-[#3b82f6] to-[#8b5cf6] rounded-lg p-4 items-center justify-center gap-3 border border-white/20">
                   <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white font-bold">
                     🎁
                   </div>
@@ -292,10 +282,34 @@ export function WebinarPage() {
                     <p className="text-[#f5a623] font-bold">اختيار فائز بجائزة اشتراك بريميوم في كوانتروك</p>
                   </div>
                 </div>
+
+                {/* Instructor Section - Desktop only */}
+                <div className="hidden lg:block mt-6 bg-gradient-to-r from-[#f5a623] to-[#8b5cf6] rounded-lg p-[2px]" dir="rtl">
+                <div className="bg-[#1a1040] backdrop-blur rounded-lg p-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#f5a623] to-[#e09515] p-1 flex-shrink-0">
+                      <div className="w-full h-full rounded-full overflow-hidden">
+                        <div className="w-full h-full bg-gradient-to-br from-[#1a2744] to-[#2a3754] flex items-center justify-center">
+                          <svg className="w-8 h-8 text-[#f5a623]" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex-1 text-right">
+                      <p className="text-[#f5a623] text-xs mb-1">المحاضر</p>
+                      <h3 className="text-base font-bold text-white">أ. أحمد العزازي</h3>
+                      <p className="text-gray-300 text-xs leading-relaxed mt-1">
+                        محاضر ومصمّم برامج تدريبية في الأسهم الأمريكية والفوركس
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                </div>
               </div>
 
               {/* Promo Banner - Mobile only (above form) */}
-              <div className="sm:hidden order-2 flex bg-gradient-to-r from-[#1a1f4d] to-[#2d1b4e] rounded-lg p-3 items-center justify-center gap-3 border border-purple-500/30" dir="rtl">
+              <div className="sm:hidden order-2 flex bg-gradient-to-r from-[#10b981] via-[#3b82f6] to-[#8b5cf6] rounded-lg p-3 items-center justify-center gap-3 border border-white/20" dir="rtl">
                 <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
                   🎁
                 </div>
@@ -306,9 +320,55 @@ export function WebinarPage() {
                 </div>
               </div>
 
+              {/* Instructor Section - Mobile only */}
+              <div className="lg:hidden order-2 mt-4 bg-gradient-to-r from-[#f5a623] to-[#8b5cf6] rounded-lg p-[2px]" dir="rtl">
+              <div className="bg-[#1a1040] backdrop-blur rounded-lg p-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#f5a623] to-[#e09515] p-1 flex-shrink-0">
+                    <div className="w-full h-full rounded-full overflow-hidden">
+                      <div className="w-full h-full bg-gradient-to-br from-[#1a2744] to-[#2a3754] flex items-center justify-center">
+                        <svg className="w-7 h-7 text-[#f5a623]" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-1 text-right">
+                    <p className="text-[#f5a623] text-[10px] mb-0.5">المحاضر</p>
+                    <h3 className="text-sm font-bold text-white">أ. أحمد العزازي</h3>
+                    <p className="text-gray-300 text-[10px] leading-relaxed mt-0.5">
+                      محاضر ومصمّم برامج تدريبية في الأسهم الأمريكية والفوركس
+                    </p>
+                  </div>
+                </div>
+              </div>
+              </div>
+
               {/* Left Side - Registration Form (shows third on mobile) */}
-              <div className="order-3 lg:order-1">
-                <div className="bg-gradient-to-br from-[#f5a623] via-[#c77dff] to-[#7b2cbf] rounded-lg shadow-2xl overflow-hidden max-w-md mx-auto lg:mx-0 p-1">
+              <div className="order-3 lg:order-1 w-full">
+                {/* Countdown Timer - Desktop only (above form) */}
+                <div className="hidden lg:flex flex-col items-center pt-6 mb-6">
+                  <div className="flex justify-center gap-4" dir="ltr">
+                    <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-4 min-w-[80px] text-center border border-purple-500/30 shadow-lg">
+                      <div className="text-4xl font-bold text-white">{String(timeLeft.days).padStart(2, '0')}</div>
+                      <div className="text-xs text-gray-400 mt-1">أيام</div>
+                    </div>
+                    <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-4 min-w-[80px] text-center border border-purple-500/30 shadow-lg">
+                      <div className="text-4xl font-bold text-white">{String(timeLeft.hours).padStart(2, '0')}</div>
+                      <div className="text-xs text-gray-400 mt-1">ساعات</div>
+                    </div>
+                    <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-4 min-w-[80px] text-center border border-purple-500/30 shadow-lg">
+                      <div className="text-4xl font-bold text-white">{String(timeLeft.minutes).padStart(2, '0')}</div>
+                      <div className="text-xs text-gray-400 mt-1">دقائق</div>
+                    </div>
+                    <div className="bg-gradient-to-b from-[#2a1f5c] to-[#1a1040] rounded-lg p-4 min-w-[80px] text-center border border-purple-500/30 shadow-lg">
+                      <div className="text-4xl font-bold text-white">{String(timeLeft.seconds).padStart(2, '0')}</div>
+                      <div className="text-xs text-gray-400 mt-1">ثواني</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-[#f5a623] via-[#c77dff] to-[#7b2cbf] rounded-lg shadow-2xl overflow-hidden max-w-md mx-auto p-[2px] sm:p-1">
                   <div className="bg-[#1a1f35] rounded-lg overflow-hidden">
                   {/* Form Header */}
                   <div className="bg-gradient-to-r from-[#f5a623]/20 to-[#7b2cbf]/20 p-4 sm:p-6 pb-2 text-center border-b border-purple-500/30">
@@ -459,57 +519,6 @@ export function WebinarPage() {
           </div>
         </div>
 
-        {/* Presenter Section */}
-        <div className="bg-gradient-to-r from-[#f5a623]/20 via-[#7b2cbf]/30 to-[#1a2744] py-8 sm:py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="text-right mb-6 sm:mb-8" dir="rtl">
-              <h2 className="text-xl sm:text-2xl font-bold text-white inline-block border-r-4 border-[#f5a623] pr-4">
-                المحاضرون
-              </h2>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur rounded-lg p-4 sm:p-6 flex flex-col md:flex-row items-center md:items-start gap-4 sm:gap-6 border border-white/20" dir="rtl">
-              {/* Presenter Image */}
-              <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-[#f5a623] to-[#e09515] p-1 flex-shrink-0">
-                <div className="w-full h-full rounded-full overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-[#1a2744] to-[#2a3754] flex items-center justify-center">
-                    <svg className="w-12 h-12 sm:w-16 sm:h-16 text-[#f5a623]" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              {/* Presenter Info */}
-              <div className="flex-1 text-right">
-                <p className="text-[#f5a623] text-xs sm:text-sm mb-1">المحاضر</p>
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-2">أ. أحمد العزازي</h3>
-                <div className="w-16 h-1 bg-[#f5a623] mb-3 mr-0"></div>
-                <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
-                  محاضر ومصمّم برامج تدريبية في الأسهم الأمريكية والفوركس مع خبرة عملية داخل غرف التداول
-                </p>
-              </div>
-
-            </div>
-
-            {/* Bottom Info */}
-            <div className="mt-6 sm:mt-8 flex flex-wrap justify-center gap-6 sm:gap-8 text-center" dir="rtl">
-              <div>
-                <p className="text-gray-400 text-xs sm:text-sm">التاريخ</p>
-                <p className="text-white font-bold text-sm sm:text-base">السبت 13 ديسمبر</p>
-                <p className="text-gray-300 text-xs sm:text-sm">08:30 م</p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-xs sm:text-sm">المدة</p>
-                <p className="text-white font-bold text-sm sm:text-base">120 دقيقة</p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-xs sm:text-sm">السعر</p>
-                <p className="text-white font-bold text-sm sm:text-base">مجاناً</p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </PageLayout>
   );

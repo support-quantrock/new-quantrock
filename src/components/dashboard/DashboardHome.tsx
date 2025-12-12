@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import {
   Users,
   DollarSign,
-  MousePointer,
   TrendingUp,
   Copy,
   CheckCircle,
@@ -29,6 +28,13 @@ interface Stats {
   webinarRegistrations: number;
 }
 
+interface WebinarReferral {
+  id: string;
+  name: string;
+  email: string;
+  created_at: string;
+}
+
 export function DashboardHome() {
   const { user, profile } = useAuth();
   const [stats, setStats] = useState<Stats>({
@@ -40,6 +46,7 @@ export function DashboardHome() {
     webinarRegistrations: 0,
   });
   const [recentReferrals, setRecentReferrals] = useState<Referral[]>([]);
+  const [webinarReferrals, setWebinarReferrals] = useState<WebinarReferral[]>([]);
   const [copied, setCopied] = useState(false);
   const [copiedWebinar, setCopiedWebinar] = useState(false);
   const [showWebinarQR, setShowWebinarQR] = useState(false);
@@ -60,6 +67,7 @@ export function DashboardHome() {
     if (user) {
       fetchStats();
       fetchRecentReferrals();
+      fetchWebinarReferrals();
     }
   }, [user]);
 
@@ -133,6 +141,33 @@ export function DashboardHome() {
       setRecentReferrals(data || []);
     } catch (error) {
       console.error('Error fetching recent referrals:', error);
+    }
+  };
+
+  const fetchWebinarReferrals = async () => {
+    if (!profile?.referral_code) return;
+
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+      const response = await fetch(
+        `${supabaseUrl}/rest/v1/webinar_registrations?referrer_code=eq.${profile.referral_code}&select=id,name,email,created_at&order=created_at.desc&limit=5`,
+        {
+          headers: {
+            'apikey': supabaseKey,
+            'Authorization': `Bearer ${supabaseKey}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setWebinarReferrals(data || []);
+      }
+    } catch (error) {
+      console.error('Error fetching webinar referrals:', error);
     }
   };
 
@@ -226,13 +261,6 @@ export function DashboardHome() {
       icon: DollarSign,
       color: 'from-green-500 to-green-600',
       bgColor: 'bg-green-500/10',
-    },
-    {
-      label: 'Link Clicks',
-      value: stats.totalClicks,
-      icon: MousePointer,
-      color: 'from-blue-500 to-blue-600',
-      bgColor: 'bg-blue-500/10',
     },
     {
       label: 'Pending Earnings',
@@ -437,9 +465,9 @@ export function DashboardHome() {
         </div>
       </motion.div>
 
-      {/* Recent Referrals & Quick Actions */}
+      {/* Recent Webinar Referrals & Quick Actions */}
       <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
-        {/* Recent Referrals */}
+        {/* Recent Webinar Referrals */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -447,7 +475,10 @@ export function DashboardHome() {
           className="bg-gradient-to-br from-[#1a1f4d]/60 to-[#2d1b4e]/40 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-purple-500/20"
         >
           <div className="flex items-center justify-between mb-3 sm:mb-4">
-            <h2 className="text-base sm:text-lg font-bold text-white">Recent Referrals</h2>
+            <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              <Video className="w-4 h-4 sm:w-5 sm:h-5 text-[#f5a623]" />
+              Recent Webinar Referrals
+            </h2>
             <Link
               to="/dashboard/referrals"
               className="text-purple-400 hover:text-purple-300 text-xs sm:text-sm flex items-center gap-1"
@@ -456,40 +487,36 @@ export function DashboardHome() {
             </Link>
           </div>
 
-          {recentReferrals.length === 0 ? (
+          {webinarReferrals.length === 0 ? (
             <div className="text-center py-6 sm:py-8">
-              <Users className="w-10 h-10 sm:w-12 sm:h-12 text-gray-600 mx-auto mb-2 sm:mb-3" />
-              <p className="text-gray-400 text-sm">No referrals yet</p>
-              <p className="text-gray-500 text-xs sm:text-sm">Share your link to start earning!</p>
+              <Video className="w-10 h-10 sm:w-12 sm:h-12 text-gray-600 mx-auto mb-2 sm:mb-3" />
+              <p className="text-gray-400 text-sm">No webinar referrals yet</p>
+              <p className="text-gray-500 text-xs sm:text-sm">Share your webinar link to get referrals!</p>
             </div>
           ) : (
             <div className="space-y-2 sm:space-y-3">
-              {recentReferrals.map((referral) => (
+              {webinarReferrals.map((referral) => (
                 <div
                   key={referral.id}
                   className="flex items-center justify-between p-2.5 sm:p-3 bg-black/20 rounded-xl"
                 >
                   <div className="flex items-center gap-2 sm:gap-3">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
-                      <span className="text-purple-400 font-bold text-sm sm:text-base">
-                        {(referral.referred_user as any)?.full_name?.charAt(0)?.toUpperCase() || '?'}
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#f5a623]/20 flex items-center justify-center">
+                      <span className="text-[#f5a623] font-bold text-sm sm:text-base">
+                        {referral.name?.charAt(0)?.toUpperCase() || '?'}
                       </span>
                     </div>
                     <div>
                       <p className="text-white font-medium text-sm sm:text-base">
-                        {(referral.referred_user as any)?.full_name || 'Anonymous'}
+                        {referral.name || 'Anonymous'}
                       </p>
                       <p className="text-gray-500 text-[10px] sm:text-xs">
                         {new Date(referral.created_at).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
-                  <span className={`px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium ${
-                    referral.status === 'completed' ? 'bg-green-500/20 text-green-400' :
-                    referral.status === 'paid' ? 'bg-blue-500/20 text-blue-400' :
-                    'bg-amber-500/20 text-amber-400'
-                  }`}>
-                    {referral.status}
+                  <span className="px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium bg-green-500/20 text-green-400">
+                    Registered
                   </span>
                 </div>
               ))}

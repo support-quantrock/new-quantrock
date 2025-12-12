@@ -13,15 +13,16 @@ interface WebinarRegistration {
   referrer_name?: string;
 }
 
-// Map webinar IDs to names and dates
-const webinarInfo: Record<string, { name: string; date: string }> = {
-  'dec-2025': { name: 'ندوة ديسمبر 2025', date: '13 ديسمبر 2025' },
+// Map webinar IDs to names, dates, and status
+const webinarInfo: Record<string, { name: string; date: string; status: 'current' | 'previous' }> = {
+  'dec-2025': { name: 'ندوة ديسمبر 2025', date: '13 ديسمبر 2025', status: 'current' },
 };
 
 export function WebinarDashboard() {
   const [registrations, setRegistrations] = useState<WebinarRegistration[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState<'current' | 'previous'>('current');
 
   const fetchRegistrations = async () => {
     setLoading(true);
@@ -119,6 +120,16 @@ export function WebinarDashboard() {
     return matchesSearch;
   });
 
+  // Filter by tab (current/previous)
+  const filteredByTab = filteredRegistrations.filter(reg => {
+    const info = webinarInfo[reg.webinar_id];
+    return info?.status === activeTab;
+  });
+
+  // Count registrations by status for tab badges
+  const currentCount = registrations.filter(reg => webinarInfo[reg.webinar_id]?.status === 'current').length;
+  const previousCount = registrations.filter(reg => webinarInfo[reg.webinar_id]?.status === 'previous').length;
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -152,10 +163,44 @@ export function WebinarDashboard() {
             <Users className="w-7 h-7 text-purple-400" />
           </div>
           <div>
-            <p className="text-gray-400 text-sm">Total Registrations</p>
-            <p className="text-white text-3xl font-bold">{registrations.length}</p>
+            <p className="text-gray-400 text-sm">{activeTab === 'current' ? 'Current' : 'Previous'} Registrations</p>
+            <p className="text-white text-3xl font-bold">{activeTab === 'current' ? currentCount : previousCount}</p>
           </div>
         </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-3">
+        <button
+          onClick={() => setActiveTab('current')}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all duration-300 ${
+            activeTab === 'current'
+              ? 'bg-gradient-to-r from-purple-600/40 to-blue-600/40 border-2 border-purple-500/70 text-white'
+              : 'bg-black/40 border border-purple-500/30 text-gray-400 hover:bg-purple-500/20 hover:text-white'
+          }`}
+        >
+          Current
+          <span className={`px-2 py-0.5 rounded-full text-xs ${
+            activeTab === 'current' ? 'bg-purple-500/30' : 'bg-gray-600/30'
+          }`}>
+            {currentCount}
+          </span>
+        </button>
+        <button
+          onClick={() => setActiveTab('previous')}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all duration-300 ${
+            activeTab === 'previous'
+              ? 'bg-gradient-to-r from-purple-600/40 to-blue-600/40 border-2 border-purple-500/70 text-white'
+              : 'bg-black/40 border border-purple-500/30 text-gray-400 hover:bg-purple-500/20 hover:text-white'
+          }`}
+        >
+          Previous
+          <span className={`px-2 py-0.5 rounded-full text-xs ${
+            activeTab === 'previous' ? 'bg-purple-500/30' : 'bg-gray-600/30'
+          }`}>
+            {previousCount}
+          </span>
+        </button>
       </div>
 
       {/* Search */}
@@ -176,10 +221,10 @@ export function WebinarDashboard() {
           <div className="flex items-center justify-center py-12">
             <RefreshCw className="w-8 h-8 text-purple-400 animate-spin" />
           </div>
-        ) : filteredRegistrations.length === 0 ? (
+        ) : filteredByTab.length === 0 ? (
           <div className="text-center py-12">
             <Users className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-            <p className="text-gray-400">No registrations found</p>
+            <p className="text-gray-400">No {activeTab} webinar registrations found</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -196,7 +241,7 @@ export function WebinarDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {filteredRegistrations.map((reg) => (
+                {filteredByTab.map((reg) => (
                   <tr key={reg.id} className="border-b border-purple-500/10 hover:bg-white/5 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
@@ -274,7 +319,7 @@ export function WebinarDashboard() {
 
       {/* Footer Stats */}
       <div className="text-center text-gray-400 text-sm">
-        Showing {filteredRegistrations.length} of {registrations.length} registrations
+        Showing {filteredByTab.length} of {activeTab === 'current' ? currentCount : previousCount} {activeTab} webinar registrations
       </div>
     </div>
   );
